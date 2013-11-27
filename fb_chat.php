@@ -15,7 +15,7 @@ class fb_chat {
 
     function __construct() {
         if (USERID == 0) {
-            return;
+            exit;
         }
         
         $this->plugPrefs = e107::getPlugConfig('fb_chat')->getPref();
@@ -58,20 +58,18 @@ class fb_chat {
                 $this->getUserName($_POST['tid']);
                 break;
             default:
-                echo "ERROR: Invalid action parameter.";
-                break;
+                exit;
         }
     }
 
-    function startChatSession() {
-        $items = '';
+    function startChatSession($items = "") {
         if (!empty($_SESSION['openChatBoxes'])) {
             foreach ($_SESSION['openChatBoxes'] as $chatbox => $void) {
                 $items .= $this->chatBoxSession($chatbox);
             }
         }
 
-        if ($items != '') {
+        if (!empty($items)) {
             $items = substr($items, 0, -1);
         }
         
@@ -83,9 +81,7 @@ class fb_chat {
         exit;
     }
 
-    function chatHeartbeat() {
-        $items = '';
-        
+    function chatHeartbeat($items = "") {
         $query = 'SELECT * FROM #fb_chat AS f
             LEFT JOIN #user AS u ON f.fb_chat_from = u.user_id
             WHERE 
@@ -145,7 +141,7 @@ class fb_chat {
         
         e107::getDb()->update("fb_chat", "fb_chat_rcd = 1 WHERE fb_chat_to = " . USERID . " AND fb_chat_rcd = 0 ");
 
-        if ($items != '') {
+        if (!empty($items)) {
             $items = substr($items, 0, -1);
         }
 
@@ -241,10 +237,8 @@ class fb_chat {
         $tp = e107::getParser();
         $opts = $this->_handleOutput_get_opts();
         $text = $tp->toHTML($text, FALSE, 'BODY' . $opts);
-        
         // Try to embed videos by links
         $text = $this->_handleOutput_embed_videos($text);
-        
         // TODO - get a better solution to handle quote conflict with json
         $text = str_replace("\"", "'", $text);
         return $text;
@@ -277,9 +271,10 @@ class fb_chat {
         $urls = $this->_get_urls_from_string($text);       
         if (isset($urls[0]) && !empty($urls[0])) {
             require_once("classes/autoembed/AutoEmbed.class.php");
-            $aeObj = new AutoEmbed;
             
+            $aeObj = new AutoEmbed;
             $embedCode = "";
+            
             foreach($urls[0] as $url) {
                 if ($aeObj->parseUrl($url)) {
                     $aeObj->setWidth(220);
