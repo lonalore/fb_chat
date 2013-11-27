@@ -47,6 +47,8 @@ class fb_chat_e_header {
         e107::css('fb_chat', 'css/fb_chat_screen.css');
         e107::css('fb_chat', 'css/fb_chat_screen_ie.css', null, 'all', '<!--[if lte IE 7]>', '<![endif]-->');
         
+        // TODO: Need to fix bootstrap theme's CSS style because of chat wrapper...
+        // TODO: Make an option on Admin UI for this
         //e107::css('fb_chat', 'css/fix/fb_chat__bootstrap.css');
         
         e107::js('fb_chat', 'js/fb_chat.js', 'jquery');
