@@ -7,7 +7,9 @@ class fb_chat_main {
             return FALSE;
         }
 
-        if (!check_class($this->plugPrefs['fb_chat_class'])) {
+        $class = vartrue($this->plugPrefs['fb_chat_class'], 253);
+        
+        if (!check_class($class)) {
             return FALSE;
         }
         
@@ -94,16 +96,16 @@ class fb_chat_main {
     
     public function handle_output($text) {
         $tp = e107::getParser();
-        $opts = $this->_handle_output_get_opts();
+        $opts = $this->handle_output_get_opts();
         $text = $tp->toHTML($text, FALSE, 'BODY' . $opts);
         // Try to embed videos by links
-        $text = $this->_handle_output_embed_videos($text);
+        $text = $this->handle_output_embed_videos($text);
         // TODO - get a better solution to handle quote conflict with json
         $text = str_replace("\"", "'", $text);
         return $text;
     }
 
-    public function _handle_output_get_opts($opts = "") {
+    public function handle_output_get_opts($opts = "") {
         $emote = vartrue($this->plugPrefs['fb_chat_emote'], 0);
         if ((int) $emote === 1) {
             $opts .= ",emotes_on";
@@ -121,13 +123,13 @@ class fb_chat_main {
         return $opts;
     }
 
-    public function _handle_output_embed_videos($text) {
+    public function handle_output_embed_videos($text) {
         $emb = vartrue($this->plugPrefs['fb_chat_embed_videos'], 0);
         if ((int) $emb === 0) {
             return $text;
         }
 
-        $urls = $this->_get_urls_from_string($text);
+        $urls = $this->get_urls_from_string($text);
         if (isset($urls[0]) && !empty($urls[0])) {
             require_once("autoembed/AutoEmbed.class.php");
 
@@ -150,9 +152,27 @@ class fb_chat_main {
         return $text;
     }
 
-    public function _get_urls_from_string($string = "", $matches = array()) {
+    public function get_urls_from_string($string = "", $matches = array()) {
         preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $string, $matches);
         return array_unique($matches);
+    }
+    
+    public function get_new_messages($uid = 0, $messages = array()) {
+        if ((int) $uid === 0) {
+            return $messages;
+        }
+        
+        $query = 'SELECT * FROM #fb_chat AS f
+            LEFT JOIN #user AS u ON f.fb_chat_from = u.user_id
+            WHERE 
+                f.fb_chat_to = "' . (int) $uid . '" 
+                AND f.fb_chat_rcd = 0 
+            ORDER BY f.fb_chat_id ASC';
+
+        $sql = e107::getDb();
+        $messages = $sql->retrieve($query, TRUE);
+        
+        return $messages;
     }
         
 }
