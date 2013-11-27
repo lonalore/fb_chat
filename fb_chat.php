@@ -175,7 +175,7 @@ class fb_chat extends fb_chat_main {
      *  User ID of the sender
      */
     public function chat_send($to = 0, $msg = "", $from = USERID) {
-        if ((int) $to === 0 || (int) $$from === 0) {
+        if ((int) $to === 0 || (int) $from === 0) {
             exit;
         }
         
