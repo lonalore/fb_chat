@@ -16,8 +16,8 @@ class fb_chat_menu {
     private $plugPrefs = array();
     
     /**
-     * Get plugin prefs and select online users from database after check
-     * current user permission.
+     * List online users after check current user permission.
+     * 
      * @return
      */
     function __construct() {
@@ -31,6 +31,14 @@ class fb_chat_menu {
             return;
         }
         
+        $this->getOnlineUsers();
+        $this->listOnlineUsers();
+    }
+    
+    /**
+     * Get online users from DB and populate them into an array.
+     */
+    function getOnlineUsers() {
         $sqlTable = "online";
         $sqlField = "DISTINCT(online_user_id)";
         $sqlArgs = "online_user_id != 0";
@@ -43,14 +51,12 @@ class fb_chat_menu {
                 'name' => $this->get_display_name($id[0]),
             );
         }
-        $this->listOnlineUsers();
     }
     
     /**
-     * Parse output HTML with online users by using
-     * template file. Finally, render the menu.
+     * Render output HTML.
      */
-    public function listOnlineUsers() {
+    function listOnlineUsers() {
         $template = e107::getTemplate('fb_chat');
         $sc = e107::getScBatch('fb_chat', TRUE);
         $tp = e107::getParser();
