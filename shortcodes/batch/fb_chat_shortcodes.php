@@ -84,6 +84,10 @@ class fb_chat_shortcodes extends e_shortcode {
         return "<img " . $text . "/>";
     }
 
+    function sc_avatar_name() {
+        return $this->var['name'];
+    }
+    
 }
 
 ?>

@@ -4,8 +4,10 @@
         linkClass: 'fbcLaunch',
         requestPath: 'N/A',
         heartbeatMin: 5000,
-        heartbeatMax: 30000
-    }
+        heartbeatMax: 30000,
+        floatMenu: 1,
+        floatMenuTitle: "Online"
+    };
 
     $.fn.fb_chat = function(options) {
         // Create namespace
@@ -51,6 +53,47 @@
             $('body').wrapInner(function() {
                 var wrapper = '<div id="FBChatMain"></div>';
                 return wrapper;
+            });
+            
+            if (fb_chat.settings.floatMenu == 1) {
+                _setup_build_structure_menu();
+            }
+        };
+        
+        var _setup_build_structure_menu = function() {
+            TitleString = fb_chat.settings.floatMenuTitle;
+            
+            cbHTML = '<div class="chatboxhead">';
+            cbHTML += '<div class="chatboxtitle">' + TitleString + ' (0)</div>';
+            cbHTML += '<br clear="all"/>';
+            cbHTML += '</div>';
+            cbHTML += '<div class="chatboxcontent"></div>';
+
+            $("<div />")
+                    .attr("id", "chatbox_online_menu")
+                    .addClass("chatbox")
+                    .html(cbHTML)
+                    .appendTo($("body"))
+                    .css('right', '20px')
+                    .css('bottom', '0px')
+                    .css('display', 'block')
+                    .find('.chatboxcontent')
+                    .css('display', 'none')
+                    .ready(function() {
+                
+                $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=6", {}, function(data) {
+                    $('#chatbox_online_menu .chatboxcontent').html(data);
+                    TitleString += ' (' + $('#chatbox_online_menu li').size() + ')';
+                    $('#chatbox_online_menu .chatboxtitle').html(TitleString);
+                });
+                
+                $("#chatbox_online_menu .chatboxtitle").click(function() {
+                    if ($('#chatbox_online_menu .chatboxcontent').css('display') == 'none') {
+                        $('#chatbox_online_menu .chatboxcontent').css('display', 'block');
+                    } else {
+                        $('#chatbox_online_menu .chatboxcontent').css('display', 'none');
+                    }
+                });
             });
         };
 
@@ -103,7 +146,12 @@
             }
 
             if (chatBoxeslength == 0) {
-                $("#chatbox_" + tid).css('right', '20px');
+                if (fb_chat.settings.floatMenu == 1) {
+                    width = 200 + 7 + 20;
+                } else {
+                    width = 20;
+                }
+                $("#chatbox_" + tid).css('right', width + 'px');
             } else {
                 width = chatBoxeslength * (250 + 7) + 20;
                 $("#chatbox_" + tid).css('right', width + 'px');
@@ -215,7 +263,12 @@
                 tid = fb_chat.settings.chatBoxes[x];
                 if ($("#chatbox_" + tid).css('display') != 'none') {
                     if (align == 0) {
-                        $("#chatbox_" + tid).css('right', '20px');
+                        if (fb_chat.settings.floatMenu == 1) {
+                            width = 200 + 7 + 20;
+                        } else {
+                            width = 20;
+                        }
+                        $("#chatbox_" + tid).css('right', width + 'px');
                     } else {
                         width = (align) * (250 + 7) + 20;
                         $("#chatbox_" + tid).css('right', width + 'px');
@@ -378,7 +431,7 @@
                         type: "POST",
                         url: fb_chat.settings.requestPath + "/fb_chat.php?a=4",
                         data: {
-                            to: tid, 
+                            to: tid,
                             message: message
                         },
                         cache: false,

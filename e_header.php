@@ -4,6 +4,8 @@ if (!defined('e107_INIT')) {
     exit;
 }
 
+e107::lan('fb_chat', false, true);
+
 class fb_chat_e_header {
 
     private $plugPrefs = array();
@@ -30,6 +32,8 @@ class fb_chat_e_header {
             'requestPath' => e_PLUGIN_ABS . 'fb_chat',
             'heartbeatMin' => vartrue($this->plugPrefs['fb_chat_hb_min'], 3) * 1000,
             'heartbeatMax' => vartrue($this->plugPrefs['fb_chat_hb_max'], 30) * 1000,
+            'floatMenu' => 1,
+            'floatMenuTitle' => LANF_FB_CHAT_04,
         );
         
         foreach($opts as $key => $value) {

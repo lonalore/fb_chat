@@ -8,12 +8,14 @@ if (!plugInstalled('fb_chat')) {
     exit;
 }
 
+require_once("classes/fb_chat_main.class.php");
+
 e107::lan('fb_chat', false, true);
 
-class fb_chat_menu {
+class fb_chat_menu extends fb_chat_main {
     
     private $onlineList = array();
-    private $plugPrefs = array();
+    protected $plugPrefs = array();
     
     /**
      * List online users after check current user permission.
@@ -21,90 +23,33 @@ class fb_chat_menu {
      * @return
      */
     function __construct() {
-        if (USERID == 0) {
-            return;
-        }
-        
         $this->plugPrefs = e107::getPlugConfig('fb_chat')->getPref();
         
-        if (!check_class($this->plugPrefs['fb_chat_class'])) {
+        if (!$this->check_permission()) {
             return;
         }
         
-        $this->getOnlineUsers();
-        $this->listOnlineUsers();
-    }
-    
-    /**
-     * Get online users from DB and populate them into an array.
-     */
-    function getOnlineUsers() {
-        $sqlTable = "online";
-        $sqlField = "DISTINCT(online_user_id)";
-        $sqlArgs = "online_user_id != 0";
-        //$sqlArgs .= " AND online_user_id != '" . USERID . "." . USERNAME . "'";
-        $rows = e107::getDb()->retrieve($sqlTable, $sqlField, $sqlArgs, TRUE);
-        foreach($rows as $row) {
-            $id = explode(".", $row['online_user_id']);
-            $this->onlineList[] = array(
-                'id' => (int) $id[0],
-                'name' => $this->get_display_name($id[0]),
-            );
-        }
+        $this->onlineList = $this->get_online_users();
+        $this->list_online_users();
     }
     
     /**
      * Render output HTML.
      */
-    function listOnlineUsers() {
+    function list_online_users() {
         $template = e107::getTemplate('fb_chat');
         $sc = e107::getScBatch('fb_chat', TRUE);
         $tp = e107::getParser();
         
         $text = $tp->parseTemplate($template['MENU_START']);
-        
         foreach ($this->onlineList as $val) {
             $sc->setVars($val);
             $text .= $tp->parseTemplate($template['MENU_ITEM'], TRUE, $sc);
         }
-        
         $text .= $tp->parseTemplate($template['MENU_END']);
                 
         e107::getRender()->tablerender(LANF_FB_CHAT_01, $text);
-        
         unset($text);
-    }
-    
-    /**
-     * Get chat display name by the obtained User ID
-     * @param int $uid
-     *  User ID
-     * @param string $name
-     *  Default return value
-     * @return string $name
-     */
-    function get_display_name($uid = 0, $name = "N/A") {
-        if ((int) $uid === 0) {
-            return $name;
-        }
-        
-        $mode = vartrue(e107::getPlugPref('fb_chat', 'fb_chat_title'), 0);
-        
-        if ($mode == 1) {
-            $row = get_user_data(intval($uid));
-            if (isset($row['user_login'])) {
-                $name = $row['user_login'];
-            }
-        }
-        
-        if ($name == "N/A" || $name == "") {
-            $row = get_user_data(intval($uid));
-            if (isset($row['user_name'])) {
-                $name = $row['user_name'];
-            }
-        }
-        
-        return $name;
     }
     
 }
