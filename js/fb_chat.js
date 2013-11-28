@@ -53,17 +53,15 @@
             $('body').wrapInner(function() {
                 return '<div id="FBChatMain"></div>';
             });
-            
+
             if (fb_chat.settings.floatMenu == 1) {
                 _setup_build_structure_menu();
             }
         };
-        
+
         var _setup_build_structure_menu = function() {
-            TitleString = fb_chat.settings.floatMenuTitle;
-            
             cbHTML = '<div class="chatboxhead">';
-            cbHTML += '<div class="chatboxtitle">' + TitleString + ' (0)</div>';
+            cbHTML += '<div class="chatboxtitle"></div>';
             cbHTML += '<br clear="all"/>';
             cbHTML += '</div>';
             cbHTML += '<div class="chatboxcontent"></div>';
@@ -79,18 +77,20 @@
                     .find('.chatboxcontent')
                     .css('display', 'none')
                     .ready(function() {
-                
+
                 $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=6", {}, function(data) {
                     $('#chatbox_online_menu .chatboxcontent').html(data);
+
+                    TitleString = fb_chat.settings.floatMenuTitle;
                     TitleString += ' (' + $('#chatbox_online_menu li').size() + ')';
                     $('#chatbox_online_menu .chatboxtitle').html(TitleString);
-                    
+
                     var launchClass = fb_chat.settings.linkClass;
                     $('#chatbox_online_menu .chatboxcontent li').click(function() {
                         chat_start_conversation($(this).find('.' + launchClass));
                     });
                 });
-                
+
                 $("#chatbox_online_menu .chatboxtitle").click(function() {
                     if ($('#chatbox_online_menu .chatboxcontent').css('display') == 'none') {
                         $('#chatbox_online_menu .chatboxcontent').css('display', 'block');
@@ -288,6 +288,7 @@
             if (fb_chat.settings.windowFocus == false) {
                 var blinkNumber = 0;
                 var titleChanged = 0;
+                
                 for (x in fb_chat.settings.newMessagesWin) {
                     if (fb_chat.settings.newMessagesWin[x] == true) {
                         ++blinkNumber;
@@ -299,6 +300,7 @@
                         }
                     }
                 }
+                
                 if (titleChanged == 0) {
                     document.title = fb_chat.settings.originalTitle;
                     fb_chat.settings.blinkOrder = 0;
@@ -341,17 +343,20 @@
                                 appHTML = '<div class="chatboxmessage">';
                                 appHTML += '<span class="chatboxinfo">' + item.m + '</span>';
                                 appHTML += '</div>';
+                                
                                 $("#chatbox_" + tid + " .chatboxcontent").append(appHTML);
                             } else {
                                 fb_chat.settings.newMessages[tid] = true;
                                 fb_chat.settings.newMessagesWin[tid] = true;
+                                
                                 appHTML = '<div class="chatboxmessage">';
                                 appHTML += '<span class="chatboxmessagefrom"></span>';
                                 appHTML += '<br />';
                                 appHTML += '<span class="chatboxmessagecontent"></span>';
                                 appHTML += '</div>';
+                                
                                 $("#chatbox_" + tid + " .chatboxcontent").append(appHTML);
-                                $("#chatbox_" + tid + " .chatboxmessagefrom").last().html(item.f.name + ":&nbsp;&nbsp;").text();
+                                $("#chatbox_" + tid + " .chatboxmessagefrom").last().html(item.f.name).text();
                                 $("#chatbox_" + tid + " .chatboxmessagecontent").last().html(item.m);
                             }
 
@@ -393,10 +398,12 @@
                             if ($("#chatbox_" + item.f.id).length <= 0) {
                                 chat_create_chatbox(item.f.id, 1);
                             }
+                            
                             if (item.s == 2) {
                                 appHTML = '<div class="chatboxmessage">';
                                 appHTML += '<span class="chatboxinfo"></span>';
                                 appHTML += '</div>';
+                                
                                 $("#chatbox_" + item.f.id + " .chatboxcontent").append(appHTML);
                                 $("#chatbox_" + item.f.id + " .chatboxinfo").last().html(item.m);
                             } else {
@@ -405,8 +412,9 @@
                                 appHTML += '<br />';
                                 appHTML += '<span class="chatboxmessagecontent"></span>';
                                 appHTML += '</div>';
+                                
                                 $("#chatbox_" + item.f.id + " .chatboxcontent").append(appHTML);
-                                $("#chatbox_" + item.f.id + " .chatboxmessagefrom").last().html(item.f.name + ":&nbsp;&nbsp;").text();
+                                $("#chatbox_" + item.f.id + " .chatboxmessagefrom").last().html(item.f.name).text();
                                 $("#chatbox_" + item.f.id + " .chatboxmessagecontent").last().html(item.m);
                             }
                         }
@@ -416,7 +424,6 @@
                         tid = fb_chat.settings.chatBoxes[i];
                         scHeight = $("#chatbox_" + tid + " .chatboxcontent")[0].scrollHeight;
                         $("#chatbox_" + tid + " .chatboxcontent").scrollTop(scHeight);
-                        setTimeout('$("#chatbox_" + tid + " .chatboxcontent").scrollTop($("#chatbox_" + tid + " .chatboxcontent")[0].scrollHeight);', 100);
                     }
 
                     setTimeout(function() {
@@ -430,14 +437,11 @@
             if (event.keyCode == 13 && event.shiftKey == 0) {
                 message = $(chatboxtextarea).val();
                 message = message.replace(/^\s+|\s+$/g, "");
-                if (message != "") {
+                if (message !== "") {
                     $.ajax({
                         type: "POST",
                         url: fb_chat.settings.requestPath + "/fb_chat.php?a=4",
-                        data: {
-                            to: tid,
-                            message: message
-                        },
+                        data: {to: tid, message: message},
                         cache: false,
                         dataType: "json",
                         success: function(data) {
@@ -446,9 +450,11 @@
                             cbHTML += '<br />';
                             cbHTML += '<span class="chatboxmessagecontent"></span>';
                             cbHTML += '</div>';
+
                             $("#chatbox_" + tid + " .chatboxcontent").append(cbHTML);
-                            $("#chatbox_" + tid + " .chatboxmessagefrom").last().html(data.f + ":&nbsp;&nbsp;").text();
+                            $("#chatbox_" + tid + " .chatboxmessagefrom").last().html(data.f).text();
                             $("#chatbox_" + tid + " .chatboxmessagecontent").last().html(data.m);
+
                             scHeight = $("#chatbox_" + tid + " .chatboxcontent")[0].scrollHeight;
                             $("#chatbox_" + tid + " .chatboxcontent").scrollTop(scHeight);
                         }
