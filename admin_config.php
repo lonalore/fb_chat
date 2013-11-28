@@ -107,6 +107,18 @@ class fb_chat_admin_ui extends e_admin_ui {
             ),
             'tab' => 0,
         ),
+        'fb_chat_hb_menu' => array(
+            'title' => LANA_FB_CHAT_26,
+            'type' => 'number',
+            'data' => 'int',
+            'readParms' => array(
+                'post' => LANA_FB_CHAT_12,
+            ),
+            'writeParms' => array(
+                'post' => LANA_FB_CHAT_12,
+            ),
+            'tab' => 0,
+        ),
         'fb_chat_title' => array(
             'title' => LANA_FB_CHAT_13,
             'type' => 'dropdown',

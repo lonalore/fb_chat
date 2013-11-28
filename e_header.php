@@ -4,21 +4,19 @@ if (!defined('e107_INIT')) {
     exit;
 }
 
+require_once("classes/fb_chat_main.class.php");
+
 e107::lan('fb_chat', false, true);
 
-class fb_chat_e_header {
+class fb_chat_e_header extends fb_chat_main {
 
-    private $plugPrefs = array();
+    protected $plugPrefs = array();
     private $jsOptions = "";
 
-    function __construct() {
-        if (USERID == 0) {
-            return;
-        }
-        
+    function __construct() {       
         $this->plugPrefs = e107::getPlugConfig('fb_chat')->getPref();
         
-        if (!check_class($this->plugPrefs['fb_chat_class'])) {
+        if (!$this->check_permission()) {
             return;
         }
         
@@ -27,12 +25,15 @@ class fb_chat_e_header {
     }
     
     function get_js_options() {
+        $conf = $this->plugPrefs;
+        
         $opts = array(
-            'linkClass' => vartrue($this->plugPrefs['fb_chat_launch'], 'fbcLaunch'),
+            'linkClass' => vartrue($conf['fb_chat_launch'], 'fbcLaunch'),
             'requestPath' => e_PLUGIN_ABS . 'fb_chat',
-            'heartbeatMin' => vartrue($this->plugPrefs['fb_chat_hb_min'], 3) * 1000,
-            'heartbeatMax' => vartrue($this->plugPrefs['fb_chat_hb_max'], 30) * 1000,
-            'floatMenu' => vartrue($this->plugPrefs['fb_chat_fm'], 1),
+            'heartbeatMin' => vartrue($conf['fb_chat_hb_min'], 3) * 1000,
+            'heartbeatMax' => vartrue($conf['fb_chat_hb_max'], 30) * 1000,
+            'heartbeatMenu' => vartrue($conf['fb_chat_hb_menu'], 30) * 1000,
+            'floatMenu' => vartrue($conf['fb_chat_fm'], 1),
             'floatMenuTitle' => LANF_FB_CHAT_04,
         );
         

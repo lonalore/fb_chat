@@ -9,7 +9,10 @@ require_once("classes/fb_chat_main.class.php");
 
 e107::lan('fb_chat', false, true);
 
-session_start();
+//start session if required
+if (!session_id()) {
+    session_start();
+}
 
 class fb_chat extends fb_chat_main {
 
@@ -17,7 +20,7 @@ class fb_chat extends fb_chat_main {
 
     public function __construct() {
         $this->plugPrefs = e107::getPlugConfig('fb_chat')->getPref();
-        
+
         if (!$this->check_permission()) {
             exit;
         }
@@ -68,7 +71,7 @@ class fb_chat extends fb_chat_main {
      * Start Chat Session
      * - Get opened chat windows from session and push them as json output
      *   with the current user details.
-     * 
+     *
      * @param string $items
      */
     public function chat_start_session($items = "") {
@@ -98,7 +101,7 @@ class fb_chat extends fb_chat_main {
      *   it to the output string and to session history
      * - Update messages in DB
      * - Push output string as json
-     * 
+     *
      * @param string $items
      */
     public function chat_heartbeat($items = "") {
@@ -167,7 +170,7 @@ class fb_chat extends fb_chat_main {
      * - Insert the message into DB
      * - Create output HTML from parsed message
      * - Append message details to session and push output as json
-     * 
+     *
      * @param int $to
      *  User ID addressed to.
      * @param string $msg
@@ -179,7 +182,7 @@ class fb_chat extends fb_chat_main {
         if ((int) $to === 0 || (int) $from === 0) {
             exit;
         }
-        
+
         // Parse input string
         $msg = e107::getParser()->toDB($msg);
 
@@ -194,7 +197,7 @@ class fb_chat extends fb_chat_main {
 
         // Create output HTML message
         $message = $this->handle_output($msg);
-        
+
         // Get display name of the sender
         $row = get_user_data((int) $from);
         $name = $this->get_user_name_by_names($row['user_name'], $row['user_login']);
@@ -203,7 +206,7 @@ class fb_chat extends fb_chat_main {
         if (!isset($_SESSION['chatHistory'][$to])) {
             $_SESSION['chatHistory'][$to] = '';
         }
-        
+
         $_SESSION['chatHistory'][$to] .= '{ "s": "1", "f": { "id": "' . $to . '", "name": "' . $name . '" } , "m": "' . $message . '" },';
         unset($_SESSION['tsChatBoxes'][$to]);
 
@@ -223,7 +226,7 @@ class fb_chat extends fb_chat_main {
 
     /**
      * Get chat history from session
-     * 
+     *
      * @param int $chatbox
      *  Chat partner (User ID) of the current user.
      * @param string $items
@@ -240,7 +243,7 @@ class fb_chat extends fb_chat_main {
 
     /**
      * Get the user display name (user_name or user_login)
-     * 
+     *
      * @param int $uid
      *  User ID
      */
@@ -268,7 +271,7 @@ class fb_chat extends fb_chat_main {
      * - Create HTML list
      * - Push output HTML
      */
-    public function get_online_list() {       
+    public function get_online_list() {
         $template = e107::getTemplate('fb_chat');
         $sc = e107::getScBatch('fb_chat', TRUE);
         $tp = e107::getParser();

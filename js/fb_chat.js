@@ -5,6 +5,7 @@
         requestPath: 'N/A',
         heartbeatMin: 5000,
         heartbeatMax: 30000,
+        heartbeatMenu: 30000,
         floatMenu: 1,
         floatMenuTitle: "Online"
     };
@@ -61,7 +62,7 @@
 
         var _setup_build_structure_menu = function() {
             cbHTML = '<div class="chatboxhead">';
-            cbHTML += '<div class="chatboxtitle"></div>';
+            cbHTML += '<div class="chatboxtitle">...</div>';
             cbHTML += '<br clear="all"/>';
             cbHTML += '</div>';
             cbHTML += '<div class="chatboxcontent"></div>';
@@ -158,6 +159,11 @@
                 $("#chatbox_" + tid).css('right', width + 'px');
             } else {
                 width = chatBoxeslength * (250 + 7) + 20;
+                
+                if (fb_chat.settings.floatMenu == 1) {
+                    width += 200 + 7;
+                }
+                
                 $("#chatbox_" + tid).css('right', width + 'px');
             }
 
@@ -275,6 +281,11 @@
                         $("#chatbox_" + tid).css('right', width + 'px');
                     } else {
                         width = (align) * (250 + 7) + 20;
+                        
+                        if (fb_chat.settings.floatMenu == 1) {
+                            width += 200 + 7;
+                        }
+                        
                         $("#chatbox_" + tid).css('right', width + 'px');
                     }
                     align++;
@@ -387,6 +398,27 @@
             });
         };
 
+        var chat_menu_heartbeat = function() {
+            if (fb_chat.settings.floatMenu == 1) {
+                $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=6", {}, function(data) {
+                    $('#chatbox_online_menu .chatboxcontent').html(data);
+
+                    title = fb_chat.settings.floatMenuTitle;
+                    title += ' (' + $('#chatbox_online_menu li').size() + ')';
+                    $('#chatbox_online_menu .chatboxtitle').html(title);
+
+                    var launchClass = fb_chat.settings.linkClass;
+                    $('#chatbox_online_menu .chatboxcontent li').click(function() {
+                        chat_start_conversation($(this).find('.' + launchClass));
+                    });
+
+                    setTimeout(function() {
+                        chat_menu_heartbeat();
+                    }, fb_chat.settings.heartbeatMenu);
+                });
+            }
+        }
+
         var chat_start_session = function() {
             $.ajax({
                 url: fb_chat.settings.requestPath + "/fb_chat.php?a=1",
@@ -429,6 +461,12 @@
                     setTimeout(function() {
                         chat_heartbeat();
                     }, fb_chat.settings.heartbeat);
+
+                    if (fb_chat.settings.floatMenu == 1) {
+                        setTimeout(function() {
+                            chat_menu_heartbeat();
+                        }, fb_chat.settings.heartbeatMenu);
+                    }
                 }
             });
         };

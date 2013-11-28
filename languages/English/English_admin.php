@@ -25,5 +25,6 @@ define('LANA_FB_CHAT_22', 'Date display format');
 define('LANA_FB_CHAT_23', 'Make clickable links');
 define('LANA_FB_CHAT_24', 'Make Embeddable Audio/Video HTML');
 define('LANA_FB_CHAT_25', 'Floating online list');
+define('LANA_FB_CHAT_26', 'Chat heartbeat (menu)');
 
 ?>

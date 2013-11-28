@@ -5,6 +5,7 @@
     <description lan="LAN_PLUGIN__FB_CHAT_DESC">Facebook styled chat...</description>
     <keywords>
         <word>chat</word>
+        <word>communication</word>
         <word>facebook</word>
     </keywords>
     <category>users</category>
@@ -19,6 +20,7 @@
         <pref name='fb_chat_launch'>fbcLaunch</pref>
         <pref name='fb_chat_hb_min'>3</pref>
         <pref name='fb_chat_hb_max'>30</pref>
+        <pref name='fb_chat_hb_menu'>30</pref>
         <pref name='fb_chat_title'>1</pref>
         <pref name='fb_chat_title_link'>1</pref>
         <pref name='fb_chat_nopic'>{e_IMAGE}generic/blank_avatar.jpg</pref>
