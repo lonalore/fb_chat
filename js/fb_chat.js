@@ -1,3 +1,8 @@
+/**
+ * TODO:
+ * - Create HTML codes on server-side by using template files
+ * - Remove HTML codes from JS
+ */
 (function($) {
 
     var defaults = {
