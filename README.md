@@ -22,7 +22,7 @@ Screenshots
 ===========
 
 ### Frontend
-![Screenshot 1](http://demo.lonalore.hu/screenshots/fb_chat/01.png?v=2)
+![Screenshot 1](http://demo.lonalore.hu/screenshots/fb_chat/01.png?v=3)
 
 ### Admin - Basic settings
 ![Screenshot 2](http://demo.lonalore.hu/screenshots/fb_chat/02.png?v=2)
