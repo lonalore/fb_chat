@@ -81,9 +81,9 @@
                 $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=6", {}, function(data) {
                     $('#chatbox_online_menu .chatboxcontent').html(data);
 
-                    TitleString = fb_chat.settings.floatMenuTitle;
-                    TitleString += ' (' + $('#chatbox_online_menu li').size() + ')';
-                    $('#chatbox_online_menu .chatboxtitle').html(TitleString);
+                    title = fb_chat.settings.floatMenuTitle;
+                    title += ' (' + $('#chatbox_online_menu li').size() + ')';
+                    $('#chatbox_online_menu .chatboxtitle').html(title);
 
                     var launchClass = fb_chat.settings.linkClass;
                     $('#chatbox_online_menu .chatboxcontent li').click(function() {
@@ -288,7 +288,7 @@
             if (fb_chat.settings.windowFocus == false) {
                 var blinkNumber = 0;
                 var titleChanged = 0;
-                
+
                 for (x in fb_chat.settings.newMessagesWin) {
                     if (fb_chat.settings.newMessagesWin[x] == true) {
                         ++blinkNumber;
@@ -300,7 +300,7 @@
                         }
                     }
                 }
-                
+
                 if (titleChanged == 0) {
                     document.title = fb_chat.settings.originalTitle;
                     fb_chat.settings.blinkOrder = 0;
@@ -343,18 +343,18 @@
                                 appHTML = '<div class="chatboxmessage">';
                                 appHTML += '<span class="chatboxinfo">' + item.m + '</span>';
                                 appHTML += '</div>';
-                                
+
                                 $("#chatbox_" + tid + " .chatboxcontent").append(appHTML);
                             } else {
                                 fb_chat.settings.newMessages[tid] = true;
                                 fb_chat.settings.newMessagesWin[tid] = true;
-                                
+
                                 appHTML = '<div class="chatboxmessage">';
                                 appHTML += '<span class="chatboxmessagefrom"></span>';
                                 appHTML += '<br />';
                                 appHTML += '<span class="chatboxmessagecontent"></span>';
                                 appHTML += '</div>';
-                                
+
                                 $("#chatbox_" + tid + " .chatboxcontent").append(appHTML);
                                 $("#chatbox_" + tid + " .chatboxmessagefrom").last().html(item.f.name).text();
                                 $("#chatbox_" + tid + " .chatboxmessagecontent").last().html(item.m);
@@ -398,12 +398,12 @@
                             if ($("#chatbox_" + item.f.id).length <= 0) {
                                 chat_create_chatbox(item.f.id, 1);
                             }
-                            
+
                             if (item.s == 2) {
                                 appHTML = '<div class="chatboxmessage">';
                                 appHTML += '<span class="chatboxinfo"></span>';
                                 appHTML += '</div>';
-                                
+
                                 $("#chatbox_" + item.f.id + " .chatboxcontent").append(appHTML);
                                 $("#chatbox_" + item.f.id + " .chatboxinfo").last().html(item.m);
                             } else {
@@ -412,7 +412,7 @@
                                 appHTML += '<br />';
                                 appHTML += '<span class="chatboxmessagecontent"></span>';
                                 appHTML += '</div>';
-                                
+
                                 $("#chatbox_" + item.f.id + " .chatboxcontent").append(appHTML);
                                 $("#chatbox_" + item.f.id + " .chatboxmessagefrom").last().html(item.f.name).text();
                                 $("#chatbox_" + item.f.id + " .chatboxmessagecontent").last().html(item.m);

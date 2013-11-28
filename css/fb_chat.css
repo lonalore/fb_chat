@@ -11,7 +11,7 @@ ul.fb_chat_floating_menu li div.name { padding-left: 7px; font-weight: bold; pad
 ul.fb_chat_floating_menu li img { border: none; }
 
 .fbcLaunch { cursor: pointer; }
-.fbClear { clear: left; }
+.fbcClear { clear: left; }
 
 .chatbox { position: fixed; position: expression("absolute"); width: 250px; display: none; border: none; text-align: left; background-color: #f5f5f5; }
 .chatbox .chatboxhead { position: relative; background-color: #333; padding: 5px; color: #999; }

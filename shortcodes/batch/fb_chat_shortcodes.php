@@ -19,54 +19,23 @@ class fb_chat_shortcodes extends e_shortcode {
         $this->avatar_m = "w=" . $this->avatar_mw . "&h=" . $this->avatar_mh;
     }
 
-    function sc_avatar_menu($text = "") {
-        $tp = e107::getParser();
-
-        $uid = $this->var['id'];
-
-        // e107 default avatar
-        $genAvat = e_IMAGE . "generic/blank_avatar.jpg";
-        // fb_chat default avatar
-        $defAvat = $this->plugPrefs['fb_chat_nopic'];
-        // set default avatar
-        $avatar = vartrue($defAvat, $genAvat);
-        // get source url for default avatar
-        $img = $tp->thumbUrl($avatar, $this->avatar_m, true);
-        
+    function sc_avatar($text = "") {
         $width = $this->avatar_mw;
         $height = $this->avatar_mh;
-
-        if ((int) $uid > 0) {
-            $row = get_user_data(intval($uid));
-            $image = $row['user_image'];
-            if (vartrue($image)) {
-                if (strpos($image, "://") !== false) {
-                    $img = $image;
-                } elseif (substr($image, 0, 8) == "-upload-") {
-                    // strip the -upload- from the beginning.
-                    $image = substr($image, 8);
-                    if (file_exists(e_AVATAR_UPLOAD . $image)) {
-                        // Local Default Image
-                        $img = $tp->thumbUrl(e_AVATAR_UPLOAD . $image, $this->avatar_m);
-                    }
-                } elseif (file_exists(e_AVATAR_DEFAULT . $image)) {
-                    // User-Uplaoded Image
-                    $img = $tp->thumbUrl(e_AVATAR_DEFAULT . $image, $this->avatar_m);
-                }
-            }
-        }
-
-        $title = $this->var['name'];
-        $class = vartrue($this->plugPrefs['fb_chat_launch'], 'fbcLaunch');
+        
+        $uid = $this->var['id'];
+        $ttl = $this->var['name'];
+        $cls = vartrue($this->plugPrefs['fb_chat_launch'], 'fbcLaunch');
+        $src = $this->get_avatar_image_src($uid, $width, $height);
         
         $attrs = array(
-            'class' => 'user-avatar e-tip ' . $class,
-            'src' => $img,
+            'class' => 'user-avatar e-tip ' . $cls,
+            'src' => $src,
             'fb-data' => $uid,
             'width' => $width,
             'height' => $height,
-            'title' => $title,
-            'alt' => $title,
+            'title' => $ttl,
+            'alt' => $ttl,
             'style' => 'width:' . $width . 'px;height:' . $height . 'px;',
         );
         
@@ -77,54 +46,23 @@ class fb_chat_shortcodes extends e_shortcode {
         return "<img " . $text . "/>";
     }
     
-    function sc_avatar_floating_menu($text = "") {
-        $tp = e107::getParser();
-
-        $uid = $this->var['id'];
+    function sc_avatar_floating($text = "") {
         $width = "26";
         $height = "26";
-        $params = "w=" . $width . "&h=" . $height;
 
-        // e107 default avatar
-        $genAvat = e_IMAGE . "generic/blank_avatar.jpg";
-        // fb_chat default avatar
-        $defAvat = $this->plugPrefs['fb_chat_nopic'];
-        // set default avatar
-        $avatar = vartrue($defAvat, $genAvat);
-        // get source url for default avatar
-        $img = $tp->thumbUrl($avatar, $params, true);
-
-        if ((int) $uid > 0) {
-            $row = get_user_data(intval($uid));
-            $image = $row['user_image'];
-            if (vartrue($image)) {
-                if (strpos($image, "://") !== false) {
-                    $img = $image;
-                } elseif (substr($image, 0, 8) == "-upload-") {
-                    // strip the -upload- from the beginning.
-                    $image = substr($image, 8);
-                    if (file_exists(e_AVATAR_UPLOAD . $image)) {
-                        // Local Default Image
-                        $img = $tp->thumbUrl(e_AVATAR_UPLOAD . $image, $params);
-                    }
-                } elseif (file_exists(e_AVATAR_DEFAULT . $image)) {
-                    // User-Uplaoded Image
-                    $img = $tp->thumbUrl(e_AVATAR_DEFAULT . $image, $params);
-                }
-            }
-        }
-
-        $title = $this->var['name'];
-        $class = vartrue($this->plugPrefs['fb_chat_launch'], 'fbcLaunch');
+        $uid = $this->var['id'];
+        $ttl = $this->var['name'];
+        $cls = vartrue($this->plugPrefs['fb_chat_launch'], 'fbcLaunch');
+        $src = $this->get_avatar_image_src($uid, $width, $height);
         
         $attrs = array(
-            'class' => 'user-avatar e-tip ' . $class,
-            'src' => $img,
+            'class' => 'user-avatar e-tip ' . $cls,
+            'src' => $src,
             'fb-data' => $uid,
             'width' => $width,
             'height' => $height,
-            'title' => $title,
-            'alt' => $title,
+            'title' => $ttl,
+            'alt' => $ttl,
             'style' => 'width:' . $width . 'px;height:' . $height . 'px;',
         );
         
@@ -135,8 +73,45 @@ class fb_chat_shortcodes extends e_shortcode {
         return "<img " . $text . "/>";
     }
 
-    function sc_avatar_name() {
+    function sc_name() {
         return $this->var['name'];
+    }
+    
+    function get_avatar_image_src($uid = 0, $width = 0, $height = 0) {
+        $tp = e107::getParser();
+
+        $params = "w=" . $width . "&h=" . $height;
+
+        // e107 default avatar
+        $genAvat = e_IMAGE . "generic/blank_avatar.jpg";
+        // fb_chat default avatar
+        $defAvat = $this->plugPrefs['fb_chat_nopic'];
+        // set default avatar
+        $avatar = vartrue($defAvat, $genAvat);
+        // get source url for default avatar
+        $src = $tp->thumbUrl($avatar, $params, true);
+
+        if ((int) $uid > 0) {
+            $row = get_user_data(intval($uid));
+            $image = $row['user_image'];
+            if (vartrue($image)) {
+                if (strpos($image, "://") !== false) {
+                    $src = $image;
+                } elseif (substr($image, 0, 8) == "-upload-") {
+                    // strip the -upload- from the beginning.
+                    $image = substr($image, 8);
+                    if (file_exists(e_AVATAR_UPLOAD . $image)) {
+                        // Local Default Image
+                        $src = $tp->thumbUrl(e_AVATAR_UPLOAD . $image, $params);
+                    }
+                } elseif (file_exists(e_AVATAR_DEFAULT . $image)) {
+                    // User-Uplaoded Image
+                    $src = $tp->thumbUrl(e_AVATAR_DEFAULT . $image, $params);
+                }
+            }
+        }
+        
+        return $src;
     }
     
 }
