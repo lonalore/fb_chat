@@ -51,8 +51,7 @@
 
         var _setup_build_structure = function() {
             $('body').wrapInner(function() {
-                var wrapper = '<div id="FBChatMain"></div>';
-                return wrapper;
+                return '<div id="FBChatMain"></div>';
             });
             
             if (fb_chat.settings.floatMenu == 1) {
@@ -85,6 +84,11 @@
                     $('#chatbox_online_menu .chatboxcontent').html(data);
                     TitleString += ' (' + $('#chatbox_online_menu li').size() + ')';
                     $('#chatbox_online_menu .chatboxtitle').html(TitleString);
+                    
+                    var launchClass = fb_chat.settings.linkClass;
+                    $('#chatbox_online_menu .chatboxcontent li').click(function() {
+                        chat_start_conversation($(this).find('.' + launchClass));
+                    });
                 });
                 
                 $("#chatbox_online_menu .chatboxtitle").click(function() {

@@ -16,8 +16,6 @@
         <pref name='fb_chat_class'>253</pref>
         <pref name='fb_chat_menu_pic_w'>32</pref>
         <pref name='fb_chat_menu_pic_h'>32</pref>
-        <pref name='fb_chat_page_pic_w'>64</pref>
-        <pref name='fb_chat_page_pic_h'>64</pref>
         <pref name='fb_chat_launch'>fbcLaunch</pref>
         <pref name='fb_chat_hb_min'>3</pref>
         <pref name='fb_chat_hb_max'>30</pref>
@@ -27,6 +25,7 @@
         <pref name='fb_chat_emote'>1</pref>
         <pref name='fb_chat_date_format'>short</pref>
         <pref name='fb_chat_clickable_links'>1</pref>
-        <pref name='fb_chat_embed_videos'>0</pref>
+        <pref name='fb_chat_embed_videos'>1</pref>
+        <pref name='fb_chat_fm'>1</pref>
     </pluginPrefs>
 </e107Plugin>

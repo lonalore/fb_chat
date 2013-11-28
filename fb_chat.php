@@ -36,6 +36,7 @@ class fb_chat extends fb_chat_main {
          * 3 - closechat
          * 4 - sendchat
          * 5 - get username
+         * 6 - get a HTML list with online users
          */
         $action = (int) $_GET['a'];
 

@@ -77,30 +77,6 @@ class fb_chat_admin_ui extends e_admin_ui {
             ),
             'tab' => 1,
         ),
-        'fb_chat_page_pic_w' => array(
-            'title' => LANA_FB_CHAT_07,
-            'type' => 'number',
-            'data' => 'int',
-            'readParms' => array(
-                'post' => ' px',
-            ),
-            'writeParms' => array(
-                'post' => ' px',
-            ),
-            'tab' => 1,
-        ),
-        'fb_chat_page_pic_h' => array(
-            'title' => LANA_FB_CHAT_08,
-            'type' => 'number',
-            'data' => 'int',
-            'readParms' => array(
-                'post' => ' px',
-            ),
-            'writeParms' => array(
-                'post' => ' px',
-            ),
-            'tab' => 1,
-        ),
         'fb_chat_launch' => array(
             'title' => LANA_FB_CHAT_09,
             'type' => 'text',
@@ -178,6 +154,13 @@ class fb_chat_admin_ui extends e_admin_ui {
                 'long' => PRFLAN_23,
                 'forum' => PRFLAN_24,
             ),
+            'tab' => 2,
+        ),
+        'fb_chat_fm' => array(
+            'title' => LANA_FB_CHAT_25,
+            'type' => 'boolean',
+            'writeParms' => 'label=yesno',
+            'data' => 'int',
             'tab' => 2,
         ),
     );
