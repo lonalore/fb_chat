@@ -7,6 +7,7 @@ if (!plugInstalled('fb_chat')) {
 
 require_once("classes/fb_chat_main.class.php");
 
+// [PLUGINS]/fb_chat/languages/[LANGUAGE]/[LANGUAGE]_front.php
 e107::lan('fb_chat', false, true);
 
 //start session if required
@@ -14,6 +15,11 @@ if (!session_id()) {
     session_start();
 }
 
+/**
+ * fb_chat class
+ * 
+ * Handling Ajax Requests arrive from Frontend
+ */
 class fb_chat extends fb_chat_main {
 
     protected $plugPrefs = array();
@@ -57,7 +63,7 @@ class fb_chat extends fb_chat_main {
                 $this->chat_send((int) $_POST['to'], $_POST['message']);
                 break;
             case 5:
-                $this->get_user_name($_POST['tid']);
+                $this->get_user_name((int) $_POST['tid']);
                 break;
             case 6:
                 $this->get_online_list();

@@ -10,6 +10,7 @@ if (!plugInstalled('fb_chat')) {
 
 require_once("classes/fb_chat_main.class.php");
 
+// [PLUGINS]/fb_chat/languages/[LANGUAGE]/[LANGUAGE]_front.php
 e107::lan('fb_chat', false, true);
 
 class fb_chat_menu extends fb_chat_main {
