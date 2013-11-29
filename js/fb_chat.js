@@ -67,7 +67,7 @@
 
         var _setup_build_structure_menu = function() {
             path = fb_chat.conf.requestPath;
-            
+
             cbHTML = '<div class="cbh">';
             cbHTML += '<div class="cbt">';
             cbHTML += '<div class="tc">...</div>';
@@ -82,7 +82,7 @@
                     .find('.cbc').css('display', 'none')
                     .parent().find('.cbt img').css('display', 'none')
                     .ready(function() {
-                $.post(path + "/fb_chat.php?a=6", {}, function(data) {
+                $.post(path + "/fb_chat.php?a=7", {}, function(data) {
                     $('#com .cbc').html(data);
 
                     title = fb_chat.conf.floatMenuTitle;
@@ -129,7 +129,7 @@
                 $("#cb_" + tid + " .cbta").focus();
                 return;
             }
-            
+
             path = fb_chat.conf.requestPath;
 
             cbHTML = '<div class="cbh">';
@@ -167,11 +167,11 @@
                 $("#cb_" + tid).css('right', width + 'px');
             } else {
                 width = chatBoxeslength * (250 + 7) + 20;
-                
+
                 if (fb_chat.conf.floatMenu == 1) {
                     width += 200 + 7;
                 }
-                
+
                 $("#cb_" + tid).css('right', width + 'px');
             }
 
@@ -292,11 +292,11 @@
                         $("#cb_" + tid).css('right', width + 'px');
                     } else {
                         width = (align) * (250 + 7) + 20;
-                        
+
                         if (fb_chat.conf.floatMenu == 1) {
                             width += 200 + 7;
                         }
-                        
+
                         $("#cb_" + tid).css('right', width + 'px');
                     }
                     align++;
@@ -410,25 +410,49 @@
         };
 
         var chat_menu_heartbeat = function() {
-            if (fb_chat.conf.floatMenu == 1) {
-                $.post(fb_chat.conf.requestPath + "/fb_chat.php?a=6", {}, function(data) {
-                    $('#com .cbc').html(data);
+            launchClass = fb_chat.conf.linkClass;
 
-                    title = fb_chat.conf.floatMenuTitle;
-                    title += ' (' + $('#com li').size() + ')';
-                    $('#com .tc').html(title);
-
-                    var launchClass = fb_chat.conf.linkClass;
-                    $('#com .cbc li').click(function() {
-                        chat_start_conversation($(this).find('.' + launchClass));
-                    });
-
-                    setTimeout(function() {
-                        chat_menu_heartbeat();
-                    }, fb_chat.conf.heartbeatMenu);
+            if ($('.fbcmw').length > 0) {
+                $.ajax({
+                    url: fb_chat.conf.requestPath + "/fb_chat.php?a=6",
+                    cache: false,
+                    dataType: "html",
+                    success: function(data) {
+                        // update normal menu content
+                        $('.fbcmw').html(data);
+                        $('.fbcmw .' + launchClass).click(function() {
+                            chat_start_conversation(this);
+                        });
+                    }
                 });
             }
-        }
+
+            if (fb_chat.conf.floatMenu == 1) {
+                $.ajax({
+                    url: fb_chat.conf.requestPath + "/fb_chat.php?a=7",
+                    cache: false,
+                    dataType: "html",
+                    success: function(data) {
+                        // update floating menu content
+                        $('#com .cbc').html(data);
+                        $('#com .cbc li').click(function() {
+                            chat_start_conversation($(this).find('.' + launchClass));
+                        });
+
+                        // update floating menu title
+                        title = fb_chat.conf.floatMenuTitle;
+                        title += ' (' + $('#com li').size() + ')';
+                        $('#com .tc').html(title);
+                    }
+                });
+            }
+            
+            if (fb_chat.conf.floatMenu == 1 || $('.fbcmw').length > 0) {
+                setTimeout(function() {
+                    chat_menu_heartbeat();
+                }, fb_chat.conf.heartbeatMenu);
+            }
+        };
 
         var chat_start_session = function() {
             $.ajax({

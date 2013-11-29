@@ -15,3 +15,9 @@ CREATE TABLE fb_chat_block (
   `fb_chat_block_time` int(10) NOT NULL,
   PRIMARY KEY (`fb_chat_block_id`)
 ) ENGINE=MyISAM;
+
+CREATE TABLE fb_chat_user_settings (
+  `fb_chat_user_settings_id` int(10) NOT NULL AUTO_INCREMENT,
+  `fb_chat_user_settings_allow` bit(1) NOT NULL,
+  PRIMARY KEY (`fb_chat_user_settings_id`)
+) ENGINE=MyISAM;

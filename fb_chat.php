@@ -45,7 +45,8 @@ class fb_chat extends fb_chat_main {
          * 3 - closechat
          * 4 - sendchat
          * 5 - get username
-         * 6 - get a HTML list with online users
+         * 6 - get (normal) menu content
+         * 7 - get (floating) menu content
          */
         $action = (int) $_GET['a'];
 
@@ -66,7 +67,10 @@ class fb_chat extends fb_chat_main {
                 $this->get_user_name((int) $_POST['tid']);
                 break;
             case 6:
-                $this->get_online_list();
+                $this->get_online_list(0);
+                break;
+            case 7:
+                $this->get_online_list(1);
                 break;
             default:
                 exit;
@@ -277,22 +281,34 @@ class fb_chat extends fb_chat_main {
      * - Create HTML list
      * - Push output HTML
      */
-    public function get_online_list() {
+    public function get_online_list($mode = 0) {
         $template = e107::getTemplate('fb_chat');
         $sc = e107::getScBatch('fb_chat', TRUE);
         $tp = e107::getParser();
 
         $users = $this->get_online_users();
-
-        $text = $tp->parseTemplate($template['FLOAT_MENU_START']);
-        foreach ($users as $user) {
-            $sc->setVars($user);
-            $text .= $tp->parseTemplate($template['FLOAT_MENU_ITEM'], TRUE, $sc);
+        $menu = "";
+        
+        if ((int) $mode === 0) {
+            $menu .= $tp->parseTemplate($template['MENU_START']);
+            foreach ($users as $user) {
+                $sc->setVars($user);
+                $menu .= $tp->parseTemplate($template['MENU_ITEM'], TRUE, $sc);
+            }
+            $menu .= $tp->parseTemplate($template['MENU_END']);
         }
-        $text .= $tp->parseTemplate($template['FLOAT_MENU_END']);
-
+        
+        if ((int) $mode === 1) {
+            $menu .= $tp->parseTemplate($template['FLOAT_MENU_START']);
+            foreach ($users as $user) {
+                $sc->setVars($user);
+                $menu .= $tp->parseTemplate($template['FLOAT_MENU_ITEM'], TRUE, $sc);
+            }
+            $menu .= $tp->parseTemplate($template['FLOAT_MENU_END']);
+        }
+        
         header('Content-Type: text/html; charset=utf-8');
-        echo $text;
+        echo $menu;
         exit;
     }
 

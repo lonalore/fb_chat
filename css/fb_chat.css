@@ -1,14 +1,14 @@
-ul.fb_chat_menu { list-style: none; margin: 0px; padding: 0px; }
-ul.fb_chat_menu li { float: left; }
-ul.fb_chat_menu li img { border: 1px solid #ffffff; }
+ul.fbcm { list-style: none; margin: 0px; padding: 0px; }
+ul.fbcm li { float: left; }
+ul.fbcm li img { border: 1px solid #ffffff; }
 
-ul.fb_chat_floating_menu { list-style: none; margin: 0px; padding: 0px; }
-ul.fb_chat_floating_menu li { height: 26px; padding: 2px; cursor: pointer; clear: left; }
-ul.fb_chat_floating_menu li:hover { background-color: #ccc; }
-ul.fb_chat_floating_menu li div { float: left; }
-ul.fb_chat_floating_menu li div.pic {  }
-ul.fb_chat_floating_menu li div.name { padding-left: 7px; font-weight: bold; padding-top: 3px; }
-ul.fb_chat_floating_menu li img { border: none; }
+ul.fbcfm { list-style: none; margin: 0px; padding: 0px; }
+ul.fbcfm li { height: 26px; padding: 2px; cursor: pointer; clear: left; }
+ul.fbcfm li:hover { background-color: #ccc; }
+ul.fbcfm li div { float: left; }
+ul.fbcfm li div.pic {  }
+ul.fbcfm li div.name { padding-left: 7px; font-weight: bold; padding-top: 3px; }
+ul.fbcfm li img { border: none; }
 
 .fbcLaunch { cursor: pointer; }
 .fbcClear { clear: left; }

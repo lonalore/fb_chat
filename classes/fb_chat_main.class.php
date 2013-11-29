@@ -174,6 +174,14 @@ class fb_chat_main {
         
         return $messages;
     }
+    
+    public function sanitize_string($text) {
+        $text = htmlspecialchars($text, ENT_QUOTES);
+        $text = str_replace("\n\r", "\n", $text);
+        $text = str_replace("\r\n", "\n", $text);
+        $text = str_replace("\n", "<br>", $text);
+        return $text;
+    }
         
 }
 

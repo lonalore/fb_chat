@@ -48,7 +48,9 @@ class fb_chat_menu extends fb_chat_main {
             $text .= $tp->parseTemplate($template['MENU_ITEM'], TRUE, $sc);
         }
         $text .= $tp->parseTemplate($template['MENU_END']);
-                
+
+        $text = '<div class="fbcmw">' . $text . '</div>';
+        
         e107::getRender()->tablerender(LANF_FB_CHAT_01, $text);
         unset($text);
     }
