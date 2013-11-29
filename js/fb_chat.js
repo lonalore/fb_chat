@@ -66,42 +66,49 @@
         };
 
         var _setup_build_structure_menu = function() {
-            cbHTML = '<div class="chatboxhead">';
-            cbHTML += '<div class="chatboxtitle">...</div>';
+            path = fb_chat.settings.requestPath;
+            
+            cbHTML = '<div class="cbh">';
+            cbHTML += '<div class="cbt">';
+            cbHTML += '<div class="tc">...</div>';
+            cbHTML += '<img id="setts" src="' + path + '/images/icon_settings.png" width="16" height="16" />';
+            cbHTML += '</div>';
             cbHTML += '<br clear="all"/>';
             cbHTML += '</div>';
-            cbHTML += '<div class="chatboxcontent"></div>';
+            cbHTML += '<div class="cbc"></div>';
 
-            $("<div />")
-                    .attr("id", "chatbox_online_menu")
+            $("<div />").attr("id", "com")
                     .addClass("chatbox")
                     .html(cbHTML)
                     .appendTo($("body"))
                     .css('right', '20px')
                     .css('bottom', '0px')
                     .css('display', 'block')
-                    .find('.chatboxcontent')
+                    .find('.cbc')
+                    .css('display', 'none')
+                    .parent().find('.cbt img')
                     .css('display', 'none')
                     .ready(function() {
-
-                $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=6", {}, function(data) {
-                    $('#chatbox_online_menu .chatboxcontent').html(data);
+                $.post(path + "/fb_chat.php?a=6", {}, function(data) {
+                    $('#com .cbc').html(data);
 
                     title = fb_chat.settings.floatMenuTitle;
-                    title += ' (' + $('#chatbox_online_menu li').size() + ')';
-                    $('#chatbox_online_menu .chatboxtitle').html(title);
+                    title += ' (' + $('#com li').size() + ')';
+                    $('#com .tc').html(title);
 
                     var launchClass = fb_chat.settings.linkClass;
-                    $('#chatbox_online_menu .chatboxcontent li').click(function() {
+                    $('#com .cbc li').click(function() {
                         chat_start_conversation($(this).find('.' + launchClass));
                     });
                 });
 
-                $("#chatbox_online_menu .chatboxtitle").click(function() {
-                    if ($('#chatbox_online_menu .chatboxcontent').css('display') == 'none') {
-                        $('#chatbox_online_menu .chatboxcontent').css('display', 'block');
+                $("#com .tc").click(function() {
+                    if ($('#com .cbc').css('display') == 'none') {
+                        $('#com .cbc').css('display', 'block');
+                        $('#com .cbt img').css('display', 'block');
                     } else {
-                        $('#chatbox_online_menu .chatboxcontent').css('display', 'none');
+                        $('#com .cbc').css('display', 'none');
+                        $('#com .cbt img').css('display', 'none');
                     }
                 });
             });
@@ -117,40 +124,43 @@
         var chat_start_conversation = function(obj) {
             tid = $(obj).attr("fb-data");
             chat_create_chatbox(tid);
-            $("#chatbox_" + tid + " .chatboxtextarea").focus();
+            $("#cb_" + tid + " .cbta").focus();
         };
 
         var chat_create_chatbox = function(tid, minimizeChatBox) {
-            if ($("#chatbox_" + tid).length > 0) {
-                if ($("#chatbox_" + tid).css('display') == 'none') {
-                    $("#chatbox_" + tid).css('display', 'block');
+            if ($("#cb_" + tid).length > 0) {
+                if ($("#cb_" + tid).css('display') == 'none') {
+                    $("#cb_" + tid).css('display', 'block');
                     chat_restructure_boxes();
                 }
-                $("#chatbox_" + tid + " .chatboxtextarea").focus();
+                $("#cb_" + tid + " .cbta").focus();
                 return;
             }
+            
+            path = fb_chat.settings.requestPath;
 
-            cbHTML = '<div class="chatboxhead">';
-            cbHTML += '<div class="chatboxtitle">N/A</div>';
-            cbHTML += '<div class="chatboxoptions">';
-            cbHTML += '<a id="close" href="javascript:void(0)">X</a>';
+            cbHTML = '<div class="cbh">';
+            cbHTML += '<div class="cbt">';
+            cbHTML += '<div class="tc">N/A</div>';
+            cbHTML += '<img id="setts" src="' + path + '/images/icon_settings.png" width="16" height="16" />';
+            cbHTML += '<img id="close" src="' + path + '/images/icon_close.png" width="16" height="16" />';
             cbHTML += '</div>';
             cbHTML += '<br clear="all"/>';
             cbHTML += '</div>';
-            cbHTML += '<div class="chatboxcontent"></div>';
-            cbHTML += '<div class="chatboxinput">';
-            cbHTML += '<textarea class="chatboxtextarea" maxlength="255"></textarea>';
+            cbHTML += '<div class="cbc"></div>';
+            cbHTML += '<div class="cbi">';
+            cbHTML += '<textarea class="cbta" maxlength="255"></textarea>';
             cbHTML += '</div>';
 
-            $("<div />").attr("id", "chatbox_" + tid).addClass("chatbox").html(cbHTML).appendTo($("body")).ready(function() {
+            $("<div />").attr("id", "cb_" + tid).addClass("chatbox").html(cbHTML).appendTo($("body")).ready(function() {
                 get_user_name(tid);
             });
 
-            $("#chatbox_" + tid).css('bottom', '0px');
+            $("#cb_" + tid).css('bottom', '0px');
 
             chatBoxeslength = 0;
             for (x in fb_chat.settings.chatBoxes) {
-                if ($("#chatbox_" + fb_chat.settings.chatBoxes[x]).css('display') != 'none') {
+                if ($("#cb_" + fb_chat.settings.chatBoxes[x]).css('display') != 'none') {
                     chatBoxeslength++;
                 }
             }
@@ -161,7 +171,7 @@
                 } else {
                     width = 20;
                 }
-                $("#chatbox_" + tid).css('right', width + 'px');
+                $("#cb_" + tid).css('right', width + 'px');
             } else {
                 width = chatBoxeslength * (250 + 7) + 20;
                 
@@ -169,15 +179,15 @@
                     width += 200 + 7;
                 }
                 
-                $("#chatbox_" + tid).css('right', width + 'px');
+                $("#cb_" + tid).css('right', width + 'px');
             }
 
             fb_chat.settings.chatBoxes.push(tid);
 
             if (minimizeChatBox == 1) {
                 minimizedChatBoxes = new Array();
-                if (cookie('chatbox_minimized')) {
-                    minimizedChatBoxes = cookie('chatbox_minimized').split(/\|/);
+                if (cookie('cb_minimized')) {
+                    minimizedChatBoxes = cookie('cb_minimized').split(/\|/);
                 }
 
                 minimize = 0;
@@ -188,52 +198,53 @@
                 }
 
                 if (minimize == 1) {
-                    $('#chatbox_' + tid + ' .chatboxcontent').css('display', 'none');
-                    $('#chatbox_' + tid + ' .chatboxinput').css('display', 'none');
+                    $('#cb_' + tid + ' img#setts').css('display', 'none');
+                    $('#cb_' + tid + ' .cbc').css('display', 'none');
+                    $('#cb_' + tid + ' .cbi').css('display', 'none');
                 }
             }
 
             fb_chat.settings.chatboxFocus[tid] = false;
 
-            $("#chatbox_" + tid + " .chatboxtextarea").blur(function() {
+            $("#cb_" + tid + " .cbta").blur(function() {
                 fb_chat.settings.chatboxFocus[tid] = false;
-                $("#chatbox_" + tid + " .chatboxtextarea").removeClass('chatboxtextareaselected');
+                $("#cb_" + tid + " .cbta").removeClass('cbtaselected');
             }).focus(function() {
                 fb_chat.settings.chatboxFocus[tid] = true;
                 fb_chat.settings.newMessages[tid] = false;
-                $('#chatbox_' + tid + ' .chatboxhead').removeClass('chatboxblink');
-                $("#chatbox_" + tid + " .chatboxtextarea").addClass('chatboxtextareaselected');
+                $('#cb_' + tid + ' .cbh').removeClass('cbb');
+                $("#cb_" + tid + " .cbta").addClass('cbtaselected');
             });
 
-            $("#chatbox_" + tid).click(function() {
-                if ($('#chatbox_' + tid + ' .chatboxcontent').css('display') != 'none') {
-                    $("#chatbox_" + tid + " .chatboxtextarea").focus();
+            $("#cb_" + tid).click(function() {
+                if ($('#cb_' + tid + ' .cbc').css('display') != "none") {
+                    $("#cb_" + tid + " .cbta").focus();
                 }
             });
 
-            $("#chatbox_" + tid + " .chatboxtitle").click(function() {
+            $("#cb_" + tid + " .tc").click(function() {
                 chat_toggle_chatbox(tid);
             });
 
-            $("#chatbox_" + tid + " #close").click(function() {
+            $("#cb_" + tid + " #close").click(function() {
                 chat_close_chatbox(tid);
             });
 
-            $("#chatbox_" + tid + " .chatboxtextarea").keydown(function(event) {
+            $("#cb_" + tid + " .cbta").keydown(function(event) {
                 check_input_key(event, this, tid);
                 if (event.keyCode == 13 && event.shiftKey == 0) {
                     return false;
                 }
             });
 
-            $("#chatbox_" + tid).show();
+            $("#cb_" + tid).show();
         };
 
         var chat_toggle_chatbox = function(tid) {
-            if ($('#chatbox_' + tid + ' .chatboxcontent').css('display') == 'none') {
+            if ($('#cb_' + tid + ' .cbc').css('display') == "none") {
                 var minimizedChatBoxes = new Array();
-                if (cookie('chatbox_minimized')) {
-                    minimizedChatBoxes = cookie('chatbox_minimized').split(/\|/);
+                if (cookie('cb_minimized')) {
+                    minimizedChatBoxes = cookie('cb_minimized').split(/\|/);
                 }
 
                 newCookie = '';
@@ -244,28 +255,30 @@
                 }
 
                 newCookie = newCookie.slice(0, -1);
-                cookie('chatbox_minimized', newCookie);
+                cookie('cb_minimized', newCookie);
 
-                $('#chatbox_' + tid + ' .chatboxcontent').css('display', 'block');
-                $('#chatbox_' + tid + ' .chatboxinput').css('display', 'block');
+                $('#cb_' + tid + ' img#setts').css('display', 'block');
+                $('#cb_' + tid + ' .cbc').css('display', 'block');
+                $('#cb_' + tid + ' .cbi').css('display', 'block');
 
-                scHeight = $("#chatbox_" + tid + " .chatboxcontent")[0].scrollHeight;
-                $("#chatbox_" + tid + " .chatboxcontent").scrollTop(scHeight);
+                scHeight = $("#cb_" + tid + " .cbc")[0].scrollHeight;
+                $("#cb_" + tid + " .cbc").scrollTop(scHeight);
             } else {
                 newCookie = tid;
-                if (cookie('chatbox_minimized')) {
-                    newCookie += '|' + cookie('chatbox_minimized');
+                if (cookie('cb_minimized')) {
+                    newCookie += '|' + cookie('cb_minimized');
                 }
 
-                cookie('chatbox_minimized', newCookie);
+                cookie('cb_minimized', newCookie);
 
-                $('#chatbox_' + tid + ' .chatboxcontent').css('display', 'none');
-                $('#chatbox_' + tid + ' .chatboxinput').css('display', 'none');
+                $('#cb_' + tid + ' img#setts').css('display', 'none');
+                $('#cb_' + tid + ' .cbc').css('display', 'none');
+                $('#cb_' + tid + ' .cbi').css('display', 'none');
             }
         };
 
         var chat_close_chatbox = function(tid) {
-            $('#chatbox_' + tid).css('display', 'none');
+            $('#cb_' + tid).css('display', 'none');
             chat_restructure_boxes();
             $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=3", {
                 chatbox: tid
@@ -276,14 +289,14 @@
             align = 0;
             for (x in fb_chat.settings.chatBoxes) {
                 tid = fb_chat.settings.chatBoxes[x];
-                if ($("#chatbox_" + tid).css('display') != 'none') {
+                if ($("#cb_" + tid).css('display') != 'none') {
                     if (align == 0) {
                         if (fb_chat.settings.floatMenu == 1) {
                             width = 200 + 7 + 20;
                         } else {
                             width = 20;
                         }
-                        $("#chatbox_" + tid).css('right', width + 'px');
+                        $("#cb_" + tid).css('right', width + 'px');
                     } else {
                         width = (align) * (250 + 7) + 20;
                         
@@ -291,7 +304,7 @@
                             width += 200 + 7;
                         }
                         
-                        $("#chatbox_" + tid).css('right', width + 'px');
+                        $("#cb_" + tid).css('right', width + 'px');
                     }
                     align++;
                 }
@@ -309,7 +322,7 @@
                     if (fb_chat.settings.newMessagesWin[x] == true) {
                         ++blinkNumber;
                         if (blinkNumber >= fb_chat.settings.blinkOrder) {
-                            name = $("#chatbox_" + x + " .chatboxtitle").text();
+                            name = $("#cb_" + x + " .tc").text();
                             document.title = name + '...';
                             titleChanged = 1;
                             break;
@@ -332,7 +345,7 @@
             for (x in fb_chat.settings.newMessages) {
                 if (fb_chat.settings.newMessages[x] == true) {
                     if (fb_chat.settings.chatboxFocus[x] == false) {
-                        $('#chatbox_' + x + ' .chatboxhead').toggleClass('chatboxblink');
+                        $('#cb_' + x + ' .cbh').toggleClass('cbb');
                     }
                 }
             }
@@ -346,38 +359,38 @@
                         if (item) {
                             tid = item.f.id;
 
-                            if ($("#chatbox_" + tid).length <= 0) {
+                            if ($("#cb_" + tid).length <= 0) {
                                 chat_create_chatbox(tid);
                             }
 
-                            if ($("#chatbox_" + tid).css('display') == 'none') {
-                                $("#chatbox_" + tid).css('display', 'block');
+                            if ($("#cb_" + tid).css('display') == 'none') {
+                                $("#cb_" + tid).css('display', 'block');
                                 chat_restructure_boxes();
                             }
 
                             if (item.s == 2) {
-                                appHTML = '<div class="chatboxmessage">';
-                                appHTML += '<span class="chatboxinfo">' + item.m + '</span>';
+                                appHTML = '<div class="cbmsg">';
+                                appHTML += '<span class="cbinf">' + item.m + '</span>';
                                 appHTML += '</div>';
 
-                                $("#chatbox_" + tid + " .chatboxcontent").append(appHTML);
+                                $("#cb_" + tid + " .cbc").append(appHTML);
                             } else {
                                 fb_chat.settings.newMessages[tid] = true;
                                 fb_chat.settings.newMessagesWin[tid] = true;
 
-                                appHTML = '<div class="chatboxmessage">';
-                                appHTML += '<span class="chatboxmessagefrom"></span>';
+                                appHTML = '<div class="cbmsg">';
+                                appHTML += '<span class="cbmsgfrm"></span>';
                                 appHTML += '<br />';
-                                appHTML += '<span class="chatboxmessagecontent"></span>';
+                                appHTML += '<span class="cbmsgcnt"></span>';
                                 appHTML += '</div>';
 
-                                $("#chatbox_" + tid + " .chatboxcontent").append(appHTML);
-                                $("#chatbox_" + tid + " .chatboxmessagefrom").last().html(item.f.name).text();
-                                $("#chatbox_" + tid + " .chatboxmessagecontent").last().html(item.m);
+                                $("#cb_" + tid + " .cbc").append(appHTML);
+                                $("#cb_" + tid + " .cbmsgfrm").last().html(item.f.name).text();
+                                $("#cb_" + tid + " .cbmsgcnt").last().html(item.m);
                             }
 
-                            scHeight = $("#chatbox_" + tid + " .chatboxcontent")[0].scrollHeight;
-                            $("#chatbox_" + tid + " .chatboxcontent").scrollTop(scHeight);
+                            scHeight = $("#cb_" + tid + " .cbc")[0].scrollHeight;
+                            $("#cb_" + tid + " .cbc").scrollTop(scHeight);
                             itemsfound += 1;
                         }
                     });
@@ -406,14 +419,14 @@
         var chat_menu_heartbeat = function() {
             if (fb_chat.settings.floatMenu == 1) {
                 $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=6", {}, function(data) {
-                    $('#chatbox_online_menu .chatboxcontent').html(data);
+                    $('#com .cbc').html(data);
 
                     title = fb_chat.settings.floatMenuTitle;
-                    title += ' (' + $('#chatbox_online_menu li').size() + ')';
-                    $('#chatbox_online_menu .chatboxtitle').html(title);
+                    title += ' (' + $('#com li').size() + ')';
+                    $('#com .tc').html(title);
 
                     var launchClass = fb_chat.settings.linkClass;
-                    $('#chatbox_online_menu .chatboxcontent li').click(function() {
+                    $('#com .cbc li').click(function() {
                         chat_start_conversation($(this).find('.' + launchClass));
                     });
 
@@ -432,35 +445,35 @@
                 success: function(data) {
                     $.each(data.items, function(i, item) {
                         if (item) {
-                            if ($("#chatbox_" + item.f.id).length <= 0) {
+                            if ($("#cb_" + item.f.id).length <= 0) {
                                 chat_create_chatbox(item.f.id, 1);
                             }
 
                             if (item.s == 2) {
-                                appHTML = '<div class="chatboxmessage">';
-                                appHTML += '<span class="chatboxinfo"></span>';
+                                appHTML = '<div class="cbmsg">';
+                                appHTML += '<span class="cbinf"></span>';
                                 appHTML += '</div>';
 
-                                $("#chatbox_" + item.f.id + " .chatboxcontent").append(appHTML);
-                                $("#chatbox_" + item.f.id + " .chatboxinfo").last().html(item.m);
+                                $("#cb_" + item.f.id + " .cbc").append(appHTML);
+                                $("#cb_" + item.f.id + " .cbinf").last().html(item.m);
                             } else {
-                                appHTML = '<div class="chatboxmessage">';
-                                appHTML += '<span class="chatboxmessagefrom"></span>';
+                                appHTML = '<div class="cbmsg">';
+                                appHTML += '<span class="cbmsgfrm"></span>';
                                 appHTML += '<br />';
-                                appHTML += '<span class="chatboxmessagecontent"></span>';
+                                appHTML += '<span class="cbmsgcnt"></span>';
                                 appHTML += '</div>';
 
-                                $("#chatbox_" + item.f.id + " .chatboxcontent").append(appHTML);
-                                $("#chatbox_" + item.f.id + " .chatboxmessagefrom").last().html(item.f.name).text();
-                                $("#chatbox_" + item.f.id + " .chatboxmessagecontent").last().html(item.m);
+                                $("#cb_" + item.f.id + " .cbc").append(appHTML);
+                                $("#cb_" + item.f.id + " .cbmsgfrm").last().html(item.f.name).text();
+                                $("#cb_" + item.f.id + " .cbmsgcnt").last().html(item.m);
                             }
                         }
                     });
 
                     for (i = 0; i < fb_chat.settings.chatBoxes.length; i++) {
                         tid = fb_chat.settings.chatBoxes[i];
-                        scHeight = $("#chatbox_" + tid + " .chatboxcontent")[0].scrollHeight;
-                        $("#chatbox_" + tid + " .chatboxcontent").scrollTop(scHeight);
+                        scHeight = $("#cb_" + tid + " .cbc")[0].scrollHeight;
+                        $("#cb_" + tid + " .cbc").scrollTop(scHeight);
                     }
 
                     setTimeout(function() {
@@ -476,9 +489,9 @@
             });
         };
 
-        var check_input_key = function(event, chatboxtextarea, tid) {
+        var check_input_key = function(event, cbta, tid) {
             if (event.keyCode == 13 && event.shiftKey == 0) {
-                message = $(chatboxtextarea).val();
+                message = $(cbta).val();
                 message = message.replace(/^\s+|\s+$/g, "");
                 if (message !== "") {
                     $.ajax({
@@ -488,41 +501,41 @@
                         cache: false,
                         dataType: "json",
                         success: function(data) {
-                            cbHTML = '<div class="chatboxmessage">';
-                            cbHTML += '<span class="chatboxmessagefrom"></span>';
+                            cbHTML = '<div class="cbmsg">';
+                            cbHTML += '<span class="cbmsgfrm"></span>';
                             cbHTML += '<br />';
-                            cbHTML += '<span class="chatboxmessagecontent"></span>';
+                            cbHTML += '<span class="cbmsgcnt"></span>';
                             cbHTML += '</div>';
 
-                            $("#chatbox_" + tid + " .chatboxcontent").append(cbHTML);
-                            $("#chatbox_" + tid + " .chatboxmessagefrom").last().html(data.f).text();
-                            $("#chatbox_" + tid + " .chatboxmessagecontent").last().html(data.m);
+                            $("#cb_" + tid + " .cbc").append(cbHTML);
+                            $("#cb_" + tid + " .cbmsgfrm").last().html(data.f).text();
+                            $("#cb_" + tid + " .cbmsgcnt").last().html(data.m);
 
-                            scHeight = $("#chatbox_" + tid + " .chatboxcontent")[0].scrollHeight;
-                            $("#chatbox_" + tid + " .chatboxcontent").scrollTop(scHeight);
+                            scHeight = $("#cb_" + tid + " .cbc")[0].scrollHeight;
+                            $("#cb_" + tid + " .cbc").scrollTop(scHeight);
                         }
                     });
                 }
 
-                $(chatboxtextarea).val('');
-                $(chatboxtextarea).focus();
-                $(chatboxtextarea).css('height', '20px');
+                $(cbta).val('');
+                $(cbta).focus();
+                $(cbta).css('height', '20px');
 
                 fb_chat.settings.heartbeat = fb_chat.settings.heartbeatMin;
                 fb_chat.settings.heartbeatCount = 1;
             } else {
-                var adjustedHeight = chatboxtextarea.clientHeight;
+                var adjustedHeight = cbta.clientHeight;
                 var maxHeight = 94;
                 if (maxHeight > adjustedHeight) {
-                    adjustedHeight = Math.max(chatboxtextarea.scrollHeight, adjustedHeight);
+                    adjustedHeight = Math.max(cbta.scrollHeight, adjustedHeight);
                     if (maxHeight) {
                         adjustedHeight = Math.min(maxHeight, adjustedHeight);
                     }
-                    if (adjustedHeight > chatboxtextarea.clientHeight) {
-                        $(chatboxtextarea).css('height', adjustedHeight + 8 + 'px');
+                    if (adjustedHeight > cbta.clientHeight) {
+                        $(cbta).css('height', adjustedHeight + 8 + 'px');
                     }
                 } else {
-                    $(chatboxtextarea).css('overflow', 'auto');
+                    $(cbta).css('overflow', 'auto');
                 }
             }
         };
@@ -531,7 +544,7 @@
             $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=5", {
                 tid: tid
             }, function(data) {
-                $("#chatbox_" + tid + " .chatboxtitle").html(data.name);
+                $("#cb_" + tid + " .tc").html(data.name);
             });
         };
 
