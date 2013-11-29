@@ -2,7 +2,7 @@ FB Chat (e107 plugin)
 =====================
 
 Requirements:
-- e107 CMS v2.x
+- e107 CMS v2.x (with jQuery Framework)
 
 > This plugin is under development! Use it at your own risk!
 
@@ -21,16 +21,16 @@ If you think this plugin is useful and saves you a lot of work, a lot of costs (
 Screenshots
 ===========
 
-### Frontend
+### Front-End
 ![Screenshot 1](http://demo.lonalore.hu/screenshots/fb_chat/01.png?v=4)
 ![Screenshot 2](http://demo.lonalore.hu/screenshots/fb_chat/02.png?v=4)
 ![Screenshot 3](http://demo.lonalore.hu/screenshots/fb_chat/03.png?v=4)
 
-### Admin - Basic settings
+### Admin Area - Basic settings (tab)
 ![Screenshot 4](http://demo.lonalore.hu/screenshots/fb_chat/04.png?v=4)
 
-### Admin - Chat avatar
+### Admin Area - Chat avatar (tab)
 ![Screenshot 5](http://demo.lonalore.hu/screenshots/fb_chat/05.png?v=4)
 
-### Admin - Appearance
+### Admin Area - Appearance (tab)
 ![Screenshot 6](http://demo.lonalore.hu/screenshots/fb_chat/06.png?v=4)
