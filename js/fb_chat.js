@@ -19,6 +19,7 @@
         // Create namespace
         var fb_chat = {};
 
+
         var init = function() {
             // Merge options
             fb_chat.conf = $.extend({}, defaults, options);
@@ -32,28 +33,19 @@
             fb_chat.conf.newMessagesWin = new Array();
 
             fb_chat.conf.windowFocus = true;
-            fb_chat.conf.originalTitle = "";
+            fb_chat.conf.originalTitle = document.title;
             fb_chat.conf.blinkOrder = 0;
 
             setup();
         };
 
+
         var setup = function() {
             _setup_build_structure();
             _setup_init_events();
-
-            // Store original document title
-            fb_chat.conf.originalTitle = document.title;
-
             chat_start_session();
-
-            $([window, document]).blur(function() {
-                fb_chat.conf.windowFocus = false;
-            }).focus(function() {
-                fb_chat.conf.windowFocus = true;
-                document.title = fb_chat.conf.originalTitle;
-            });
         };
+
 
         var _setup_build_structure = function() {
             $('body').wrapInner(function() {
@@ -65,6 +57,7 @@
             }
         };
 
+
         var _setup_build_structure_menu = function() {
             path = fb_chat.conf.requestPath;
 
@@ -72,53 +65,78 @@
             cbHTML += '<div class="cbt">';
             cbHTML += '<div class="tc">...</div>';
             cbHTML += '<img id="setts" src="' + path + '/images/icon_settings.png" width="16" height="16" />';
+
+            cbHTML += '<div class="settscnt">';
+            cbHTML += '</div>';
+
             cbHTML += '</div>';
             cbHTML += '<br clear="all"/>';
             cbHTML += '</div>';
             cbHTML += '<div class="cbc"></div>';
 
-            $("<div />").attr("id", "com").addClass("cb").html(cbHTML).appendTo($("body"))
-                    .css('right', '20px').css('bottom', '0px').css('display', 'block')
-                    .find('.cbc').css('display', 'none')
-                    .parent().find('.cbt img').css('display', 'none')
+            $("<div />")
+                    .attr("id", "cb_com")
+                    .addClass("cb")
+                    .html(cbHTML)
+                    .appendTo($("body"))
+                    .css('right', '20px')
+                    .css('bottom', '0px')
+                    .css('display', 'block')
+                    .find('.cbc')
+                    .css('display', 'none')
+                    .parent()
+                    .find('.cbt img')
+                    .css('display', 'none')
                     .ready(function() {
+                // Update content of Floating Menu
                 $.post(path + "/fb_chat.php?a=7", {}, function(data) {
-                    $('#com .cbc').html(data);
+                    $('#cb_com .cbc').html(data);
 
                     title = fb_chat.conf.floatMenuTitle;
-                    title += ' (' + $('#com li').size() + ')';
-                    $('#com .tc').html(title);
+                    title += ' (' + $('#cb_com li').size() + ')';
+                    $('#cb_com .tc').html(title);
 
-                    var launchClass = fb_chat.conf.linkClass;
-                    $('#com .cbc li').click(function() {
-                        chat_start_conversation($(this).find('.' + launchClass));
+                    // onClick - init Chat (start) event on list items
+                    lClass = fb_chat.conf.linkClass;
+                    $('#cb_com .cbc li').click(function() {
+                        chat_start_conversation($(this).find('.' + lClass));
                     });
                 });
 
-                $("#com .tc").click(function() {
-                    if ($('#com .cbc').css('display') == 'none') {
-                        $('#com .cbc').css('display', 'block');
-                        $('#com .cbt img').css('display', 'block');
-                    } else {
-                        $('#com .cbc').css('display', 'none');
-                        $('#com .cbt img').css('display', 'none');
-                    }
+                // onClick - Show/Hide Floating Menu
+                $("#cb_com .tc").click(function() {
+                    chat_toggle_floating_menu();
+                });
+
+                // onClick - Show/Hide settings panel
+                $("#cb_com #setts").click(function() {
+                    chat_toggle_settings_panel("com");
                 });
             });
         };
+
 
         var _setup_init_events = function() {
             var launchClass = fb_chat.conf.linkClass;
             $('.' + launchClass).click(function() {
                 chat_start_conversation(this);
             });
+
+            $([window, document]).blur(function() {
+                fb_chat.conf.windowFocus = false;
+            }).focus(function() {
+                fb_chat.conf.windowFocus = true;
+                document.title = fb_chat.conf.originalTitle;
+            });
         };
+
 
         var chat_start_conversation = function(obj) {
             tid = $(obj).attr("fb-data");
             chat_create_chatbox(tid);
             $("#cb_" + tid + " .cbta").focus();
         };
+
 
         var chat_create_chatbox = function(tid, minimizeChatBox) {
             if ($("#cb_" + tid).length > 0) {
@@ -137,6 +155,10 @@
             cbHTML += '<div class="tc">N/A</div>';
             cbHTML += '<img id="setts" src="' + path + '/images/icon_settings.png" width="16" height="16" />';
             cbHTML += '<img id="close" src="' + path + '/images/icon_close.png" width="16" height="16" />';
+
+            cbHTML += '<div class="settscnt">';
+            cbHTML += '</div>';
+
             cbHTML += '</div>';
             cbHTML += '<br clear="all"/>';
             cbHTML += '</div>';
@@ -145,7 +167,12 @@
             cbHTML += '<textarea class="cbta" maxlength="255"></textarea>';
             cbHTML += '</div>';
 
-            $("<div />").attr("id", "cb_" + tid).addClass("cb").html(cbHTML).appendTo($("body")).ready(function() {
+            $("<div />")
+                    .attr("id", "cb_" + tid)
+                    .addClass("cb")
+                    .html(cbHTML)
+                    .appendTo($("body"))
+                    .ready(function() {
                 get_user_name(tid);
             });
 
@@ -167,11 +194,9 @@
                 $("#cb_" + tid).css('right', width + 'px');
             } else {
                 width = chatBoxeslength * (250 + 7) + 20;
-
                 if (fb_chat.conf.floatMenu == 1) {
                     width += 200 + 7;
                 }
-
                 $("#cb_" + tid).css('right', width + 'px');
             }
 
@@ -209,20 +234,24 @@
                 $("#cb_" + tid + " .cbta").addClass('cbtasel');
             });
 
+            // onClick - Focus input textarea
             $("#cb_" + tid).click(function() {
                 if ($('#cb_' + tid + ' .cbc').css('display') != "none") {
                     $("#cb_" + tid + " .cbta").focus();
                 }
             });
 
+            // onClick - Toggle chatbox
             $("#cb_" + tid + " .tc").click(function() {
                 chat_toggle_chatbox(tid);
             });
 
+            // onClick - Close chatbox
             $("#cb_" + tid + " #close").click(function() {
                 chat_close_chatbox(tid);
             });
 
+            // onKeydown - Check Enter keydowns
             $("#cb_" + tid + " .cbta").keydown(function(event) {
                 check_input_key(event, this, tid);
                 if (event.keyCode == 13 && event.shiftKey == 0) {
@@ -230,8 +259,34 @@
                 }
             });
 
+            // onClick - Show/Hide settings panel
+            $("#cb_" + tid + " #setts").click(function() {
+                chat_toggle_settings_panel(tid);
+            });
+
             $("#cb_" + tid).show();
         };
+
+
+        var chat_toggle_settings_panel = function(tid) {
+            if ($("#cb_" + tid + " .settscnt").css('display') == "none") {
+                $("#cb_" + tid + " .settscnt").css('display', 'block');
+            } else {
+                $("#cb_" + tid + " .settscnt").css('display', 'none');
+            }
+        };
+
+
+        var chat_toggle_floating_menu = function() {
+            if ($('#cb_com .cbc').css('display') == 'none') {
+                $('#cb_com .cbc').css('display', 'block');
+                $('#cb_com .cbt img').css('display', 'block');
+            } else {
+                $('#cb_com .cbc').css('display', 'none');
+                $('#cb_com .cbt img').css('display', 'none');
+            }
+        };
+
 
         var chat_toggle_chatbox = function(tid) {
             if ($('#cb_' + tid + ' .cbc').css('display') == "none") {
@@ -270,6 +325,7 @@
             }
         };
 
+
         var chat_close_chatbox = function(tid) {
             $('#cb_' + tid).css('display', 'none');
             chat_restructure_boxes();
@@ -277,6 +333,7 @@
                 chatbox: tid
             });
         };
+
 
         var chat_restructure_boxes = function() {
             align = 0;
@@ -292,17 +349,16 @@
                         $("#cb_" + tid).css('right', width + 'px');
                     } else {
                         width = (align) * (250 + 7) + 20;
-
                         if (fb_chat.conf.floatMenu == 1) {
                             width += 200 + 7;
                         }
-
                         $("#cb_" + tid).css('right', width + 'px');
                     }
                     align++;
                 }
             }
         };
+
 
         var chat_heartbeat = function() {
             var itemsfound = 0;
@@ -409,8 +465,9 @@
             });
         };
 
+
         var chat_menu_heartbeat = function() {
-            launchClass = fb_chat.conf.linkClass;
+            lClass = fb_chat.conf.linkClass;
 
             if ($('.fbcmw').length > 0) {
                 $.ajax({
@@ -420,7 +477,8 @@
                     success: function(data) {
                         // update normal menu content
                         $('.fbcmw').html(data);
-                        $('.fbcmw .' + launchClass).click(function() {
+                        // onClick - Set Chat (start) event on list items
+                        $('.fbcmw .' + lClass).click(function() {
                             chat_start_conversation(this);
                         });
                     }
@@ -435,10 +493,10 @@
                     success: function(data) {
                         // update floating menu content
                         $('#com .cbc').html(data);
+                        // onClick - Set Chat (start) event on list items
                         $('#com .cbc li').click(function() {
-                            chat_start_conversation($(this).find('.' + launchClass));
+                            chat_start_conversation($(this).find('.' + lClass));
                         });
-
                         // update floating menu title
                         title = fb_chat.conf.floatMenuTitle;
                         title += ' (' + $('#com li').size() + ')';
@@ -446,13 +504,14 @@
                     }
                 });
             }
-            
+
             if (fb_chat.conf.floatMenu == 1 || $('.fbcmw').length > 0) {
                 setTimeout(function() {
                     chat_menu_heartbeat();
                 }, fb_chat.conf.heartbeatMenu);
             }
         };
+
 
         var chat_start_session = function() {
             $.ajax({
@@ -465,7 +524,6 @@
                             if ($("#cb_" + item.f.id).length <= 0) {
                                 chat_create_chatbox(item.f.id, 1);
                             }
-
                             if (item.s == 2) {
                                 appHTML = '<div class="cbmsg">';
                                 appHTML += '<span class="cbinf"></span>';
@@ -497,7 +555,7 @@
                         chat_heartbeat();
                     }, fb_chat.conf.heartbeat);
 
-                    if (fb_chat.conf.floatMenu == 1) {
+                    if (fb_chat.conf.floatMenu == 1 || $('.fbcmw').length > 0) {
                         setTimeout(function() {
                             chat_menu_heartbeat();
                         }, fb_chat.conf.heartbeatMenu);
@@ -505,6 +563,7 @@
                 }
             });
         };
+
 
         var check_input_key = function(event, cbta, tid) {
             if (event.keyCode == 13 && event.shiftKey == 0) {
@@ -557,6 +616,7 @@
             }
         };
 
+
         var get_user_name = function(tid) {
             $.post(fb_chat.conf.requestPath + "/fb_chat.php?a=5", {
                 tid: tid
@@ -564,6 +624,7 @@
                 $("#cb_" + tid + " .tc").html(data.name);
             });
         };
+
 
         /**
          * Cookie plugin

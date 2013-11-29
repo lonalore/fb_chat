@@ -34,8 +34,12 @@ ul.fbcfm li img { border: none; }
 .cb .cbopt a { text-decoration: none; color: #999; font-weight: bold; font-family: Verdana,Arial,"Bitstream Vera Sans",sans-serif; }
 .cb .chatembedcode { margin-left: -1em; padding-top: 5px; padding-bottom: 5px; }
 
-#com { width: 200px; }
-#com .cbt { font-weight: bold; }
-#com .tc { width: 170px; cursor: pointer; }
-#com .cbt img#setts { position: absolute; top: 8px; right: 6px; cursor: pointer; }
-#com .cbc { font-family: arial,sans-serif; font-size: 13px; color: #333333; height: auto; min-height: 150px; max-height: 500px; width: 198px; overflow-y: auto; overflow-x: auto; padding: 7px 0px 7px 0px; background-color: #ffffff; line-height: 1.3em; text-align: left; border: 1px solid #ccc; border-bottom: none; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); }
+.cb .settscnt { position: absolute; display: none; width: 240px; height: 60px; background-color: #f3f3f3; top: 30px; right: 1px; border-left: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+
+#cb_com { width: 200px; }
+#cb_com .cbt { font-weight: bold; }
+#cb_com .tc { width: 170px; cursor: pointer; }
+#cb_com .cbt img#setts { position: absolute; top: 8px; right: 6px; cursor: pointer; }
+#cb_com .cbc { font-family: arial,sans-serif; font-size: 13px; color: #333333; height: auto; min-height: 150px; max-height: 500px; width: 198px; overflow-y: auto; overflow-x: auto; padding: 7px 0px 7px 0px; background-color: #ffffff; line-height: 1.3em; text-align: left; border: 1px solid #ccc; border-bottom: none; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); }
+
+#cb_com .settscnt { position: absolute; display: none; width: 190px; height: 60px; background-color: #f3f3f3; top: 30px; right: 1px; border-left: 1px solid #ccc; border-bottom: 1px solid #ccc; }
