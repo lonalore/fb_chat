@@ -21,19 +21,19 @@
 
         var init = function() {
             // Merge options
-            fb_chat.settings = $.extend({}, defaults, options);
+            fb_chat.conf = $.extend({}, defaults, options);
 
-            fb_chat.settings.heartbeat = fb_chat.settings.heartbeatMin;
-            fb_chat.settings.heartbeatCount = 0;
+            fb_chat.conf.heartbeat = fb_chat.conf.heartbeatMin;
+            fb_chat.conf.heartbeatCount = 0;
 
-            fb_chat.settings.chatBoxes = new Array();
-            fb_chat.settings.chatboxFocus = new Array();
-            fb_chat.settings.newMessages = new Array();
-            fb_chat.settings.newMessagesWin = new Array();
+            fb_chat.conf.chatBoxes = new Array();
+            fb_chat.conf.chatboxFocus = new Array();
+            fb_chat.conf.newMessages = new Array();
+            fb_chat.conf.newMessagesWin = new Array();
 
-            fb_chat.settings.windowFocus = true;
-            fb_chat.settings.originalTitle = "";
-            fb_chat.settings.blinkOrder = 0;
+            fb_chat.conf.windowFocus = true;
+            fb_chat.conf.originalTitle = "";
+            fb_chat.conf.blinkOrder = 0;
 
             setup();
         };
@@ -43,15 +43,15 @@
             _setup_init_events();
 
             // Store original document title
-            fb_chat.settings.originalTitle = document.title;
+            fb_chat.conf.originalTitle = document.title;
 
             chat_start_session();
 
             $([window, document]).blur(function() {
-                fb_chat.settings.windowFocus = false;
+                fb_chat.conf.windowFocus = false;
             }).focus(function() {
-                fb_chat.settings.windowFocus = true;
-                document.title = fb_chat.settings.originalTitle;
+                fb_chat.conf.windowFocus = true;
+                document.title = fb_chat.conf.originalTitle;
             });
         };
 
@@ -60,13 +60,13 @@
                 return '<div id="FBChatMain"></div>';
             });
 
-            if (fb_chat.settings.floatMenu == 1) {
+            if (fb_chat.conf.floatMenu == 1) {
                 _setup_build_structure_menu();
             }
         };
 
         var _setup_build_structure_menu = function() {
-            path = fb_chat.settings.requestPath;
+            path = fb_chat.conf.requestPath;
             
             cbHTML = '<div class="cbh">';
             cbHTML += '<div class="cbt">';
@@ -77,26 +77,19 @@
             cbHTML += '</div>';
             cbHTML += '<div class="cbc"></div>';
 
-            $("<div />").attr("id", "com")
-                    .addClass("chatbox")
-                    .html(cbHTML)
-                    .appendTo($("body"))
-                    .css('right', '20px')
-                    .css('bottom', '0px')
-                    .css('display', 'block')
-                    .find('.cbc')
-                    .css('display', 'none')
-                    .parent().find('.cbt img')
-                    .css('display', 'none')
+            $("<div />").attr("id", "com").addClass("cb").html(cbHTML).appendTo($("body"))
+                    .css('right', '20px').css('bottom', '0px').css('display', 'block')
+                    .find('.cbc').css('display', 'none')
+                    .parent().find('.cbt img').css('display', 'none')
                     .ready(function() {
                 $.post(path + "/fb_chat.php?a=6", {}, function(data) {
                     $('#com .cbc').html(data);
 
-                    title = fb_chat.settings.floatMenuTitle;
+                    title = fb_chat.conf.floatMenuTitle;
                     title += ' (' + $('#com li').size() + ')';
                     $('#com .tc').html(title);
 
-                    var launchClass = fb_chat.settings.linkClass;
+                    var launchClass = fb_chat.conf.linkClass;
                     $('#com .cbc li').click(function() {
                         chat_start_conversation($(this).find('.' + launchClass));
                     });
@@ -115,7 +108,7 @@
         };
 
         var _setup_init_events = function() {
-            var launchClass = fb_chat.settings.linkClass;
+            var launchClass = fb_chat.conf.linkClass;
             $('.' + launchClass).click(function() {
                 chat_start_conversation(this);
             });
@@ -137,7 +130,7 @@
                 return;
             }
             
-            path = fb_chat.settings.requestPath;
+            path = fb_chat.conf.requestPath;
 
             cbHTML = '<div class="cbh">';
             cbHTML += '<div class="cbt">';
@@ -152,21 +145,21 @@
             cbHTML += '<textarea class="cbta" maxlength="255"></textarea>';
             cbHTML += '</div>';
 
-            $("<div />").attr("id", "cb_" + tid).addClass("chatbox").html(cbHTML).appendTo($("body")).ready(function() {
+            $("<div />").attr("id", "cb_" + tid).addClass("cb").html(cbHTML).appendTo($("body")).ready(function() {
                 get_user_name(tid);
             });
 
             $("#cb_" + tid).css('bottom', '0px');
 
             chatBoxeslength = 0;
-            for (x in fb_chat.settings.chatBoxes) {
-                if ($("#cb_" + fb_chat.settings.chatBoxes[x]).css('display') != 'none') {
+            for (x in fb_chat.conf.chatBoxes) {
+                if ($("#cb_" + fb_chat.conf.chatBoxes[x]).css('display') != 'none') {
                     chatBoxeslength++;
                 }
             }
 
             if (chatBoxeslength == 0) {
-                if (fb_chat.settings.floatMenu == 1) {
+                if (fb_chat.conf.floatMenu == 1) {
                     width = 200 + 7 + 20;
                 } else {
                     width = 20;
@@ -175,14 +168,14 @@
             } else {
                 width = chatBoxeslength * (250 + 7) + 20;
                 
-                if (fb_chat.settings.floatMenu == 1) {
+                if (fb_chat.conf.floatMenu == 1) {
                     width += 200 + 7;
                 }
                 
                 $("#cb_" + tid).css('right', width + 'px');
             }
 
-            fb_chat.settings.chatBoxes.push(tid);
+            fb_chat.conf.chatBoxes.push(tid);
 
             if (minimizeChatBox == 1) {
                 minimizedChatBoxes = new Array();
@@ -204,16 +197,16 @@
                 }
             }
 
-            fb_chat.settings.chatboxFocus[tid] = false;
+            fb_chat.conf.chatboxFocus[tid] = false;
 
             $("#cb_" + tid + " .cbta").blur(function() {
-                fb_chat.settings.chatboxFocus[tid] = false;
-                $("#cb_" + tid + " .cbta").removeClass('cbtaselected');
+                fb_chat.conf.chatboxFocus[tid] = false;
+                $("#cb_" + tid + " .cbta").removeClass('cbtasel');
             }).focus(function() {
-                fb_chat.settings.chatboxFocus[tid] = true;
-                fb_chat.settings.newMessages[tid] = false;
+                fb_chat.conf.chatboxFocus[tid] = true;
+                fb_chat.conf.newMessages[tid] = false;
                 $('#cb_' + tid + ' .cbh').removeClass('cbb');
-                $("#cb_" + tid + " .cbta").addClass('cbtaselected');
+                $("#cb_" + tid + " .cbta").addClass('cbtasel');
             });
 
             $("#cb_" + tid).click(function() {
@@ -280,18 +273,18 @@
         var chat_close_chatbox = function(tid) {
             $('#cb_' + tid).css('display', 'none');
             chat_restructure_boxes();
-            $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=3", {
+            $.post(fb_chat.conf.requestPath + "/fb_chat.php?a=3", {
                 chatbox: tid
             });
         };
 
         var chat_restructure_boxes = function() {
             align = 0;
-            for (x in fb_chat.settings.chatBoxes) {
-                tid = fb_chat.settings.chatBoxes[x];
+            for (x in fb_chat.conf.chatBoxes) {
+                tid = fb_chat.conf.chatBoxes[x];
                 if ($("#cb_" + tid).css('display') != 'none') {
                     if (align == 0) {
-                        if (fb_chat.settings.floatMenu == 1) {
+                        if (fb_chat.conf.floatMenu == 1) {
                             width = 200 + 7 + 20;
                         } else {
                             width = 20;
@@ -300,7 +293,7 @@
                     } else {
                         width = (align) * (250 + 7) + 20;
                         
-                        if (fb_chat.settings.floatMenu == 1) {
+                        if (fb_chat.conf.floatMenu == 1) {
                             width += 200 + 7;
                         }
                         
@@ -314,14 +307,14 @@
         var chat_heartbeat = function() {
             var itemsfound = 0;
 
-            if (fb_chat.settings.windowFocus == false) {
+            if (fb_chat.conf.windowFocus == false) {
                 var blinkNumber = 0;
                 var titleChanged = 0;
 
-                for (x in fb_chat.settings.newMessagesWin) {
-                    if (fb_chat.settings.newMessagesWin[x] == true) {
+                for (x in fb_chat.conf.newMessagesWin) {
+                    if (fb_chat.conf.newMessagesWin[x] == true) {
                         ++blinkNumber;
-                        if (blinkNumber >= fb_chat.settings.blinkOrder) {
+                        if (blinkNumber >= fb_chat.conf.blinkOrder) {
                             name = $("#cb_" + x + " .tc").text();
                             document.title = name + '...';
                             titleChanged = 1;
@@ -331,27 +324,27 @@
                 }
 
                 if (titleChanged == 0) {
-                    document.title = fb_chat.settings.originalTitle;
-                    fb_chat.settings.blinkOrder = 0;
+                    document.title = fb_chat.conf.originalTitle;
+                    fb_chat.conf.blinkOrder = 0;
                 } else {
-                    ++fb_chat.settings.blinkOrder;
+                    ++fb_chat.conf.blinkOrder;
                 }
             } else {
-                for (x in fb_chat.settings.newMessagesWin) {
-                    fb_chat.settings.newMessagesWin[x] = false;
+                for (x in fb_chat.conf.newMessagesWin) {
+                    fb_chat.conf.newMessagesWin[x] = false;
                 }
             }
 
-            for (x in fb_chat.settings.newMessages) {
-                if (fb_chat.settings.newMessages[x] == true) {
-                    if (fb_chat.settings.chatboxFocus[x] == false) {
+            for (x in fb_chat.conf.newMessages) {
+                if (fb_chat.conf.newMessages[x] == true) {
+                    if (fb_chat.conf.chatboxFocus[x] == false) {
                         $('#cb_' + x + ' .cbh').toggleClass('cbb');
                     }
                 }
             }
 
             $.ajax({
-                url: fb_chat.settings.requestPath + "/fb_chat.php?a=2",
+                url: fb_chat.conf.requestPath + "/fb_chat.php?a=2",
                 cache: false,
                 dataType: "json",
                 success: function(data) {
@@ -375,8 +368,8 @@
 
                                 $("#cb_" + tid + " .cbc").append(appHTML);
                             } else {
-                                fb_chat.settings.newMessages[tid] = true;
-                                fb_chat.settings.newMessagesWin[tid] = true;
+                                fb_chat.conf.newMessages[tid] = true;
+                                fb_chat.conf.newMessagesWin[tid] = true;
 
                                 appHTML = '<div class="cbmsg">';
                                 appHTML += '<span class="cbmsgfrm"></span>';
@@ -395,51 +388,51 @@
                         }
                     });
 
-                    fb_chat.settings.heartbeatCount++;
+                    fb_chat.conf.heartbeatCount++;
 
                     if (itemsfound > 0) {
-                        fb_chat.settings.heartbeat = fb_chat.settings.heartbeatMin;
-                        fb_chat.settings.heartbeatCount = 1;
-                    } else if (fb_chat.settings.heartbeatCount >= 10) {
-                        fb_chat.settings.heartbeat *= 2;
-                        fb_chat.settings.heartbeatCount = 1;
+                        fb_chat.conf.heartbeat = fb_chat.conf.heartbeatMin;
+                        fb_chat.conf.heartbeatCount = 1;
+                    } else if (fb_chat.conf.heartbeatCount >= 10) {
+                        fb_chat.conf.heartbeat *= 2;
+                        fb_chat.conf.heartbeatCount = 1;
 
-                        if (fb_chat.settings.heartbeat > fb_chat.settings.heartbeatMax) {
-                            fb_chat.settings.heartbeat = fb_chat.settings.heartbeatMax;
+                        if (fb_chat.conf.heartbeat > fb_chat.conf.heartbeatMax) {
+                            fb_chat.conf.heartbeat = fb_chat.conf.heartbeatMax;
                         }
                     }
 
                     setTimeout(function() {
                         chat_heartbeat();
-                    }, fb_chat.settings.heartbeat);
+                    }, fb_chat.conf.heartbeat);
                 }
             });
         };
 
         var chat_menu_heartbeat = function() {
-            if (fb_chat.settings.floatMenu == 1) {
-                $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=6", {}, function(data) {
+            if (fb_chat.conf.floatMenu == 1) {
+                $.post(fb_chat.conf.requestPath + "/fb_chat.php?a=6", {}, function(data) {
                     $('#com .cbc').html(data);
 
-                    title = fb_chat.settings.floatMenuTitle;
+                    title = fb_chat.conf.floatMenuTitle;
                     title += ' (' + $('#com li').size() + ')';
                     $('#com .tc').html(title);
 
-                    var launchClass = fb_chat.settings.linkClass;
+                    var launchClass = fb_chat.conf.linkClass;
                     $('#com .cbc li').click(function() {
                         chat_start_conversation($(this).find('.' + launchClass));
                     });
 
                     setTimeout(function() {
                         chat_menu_heartbeat();
-                    }, fb_chat.settings.heartbeatMenu);
+                    }, fb_chat.conf.heartbeatMenu);
                 });
             }
         }
 
         var chat_start_session = function() {
             $.ajax({
-                url: fb_chat.settings.requestPath + "/fb_chat.php?a=1",
+                url: fb_chat.conf.requestPath + "/fb_chat.php?a=1",
                 cache: false,
                 dataType: "json",
                 success: function(data) {
@@ -470,20 +463,20 @@
                         }
                     });
 
-                    for (i = 0; i < fb_chat.settings.chatBoxes.length; i++) {
-                        tid = fb_chat.settings.chatBoxes[i];
+                    for (i = 0; i < fb_chat.conf.chatBoxes.length; i++) {
+                        tid = fb_chat.conf.chatBoxes[i];
                         scHeight = $("#cb_" + tid + " .cbc")[0].scrollHeight;
                         $("#cb_" + tid + " .cbc").scrollTop(scHeight);
                     }
 
                     setTimeout(function() {
                         chat_heartbeat();
-                    }, fb_chat.settings.heartbeat);
+                    }, fb_chat.conf.heartbeat);
 
-                    if (fb_chat.settings.floatMenu == 1) {
+                    if (fb_chat.conf.floatMenu == 1) {
                         setTimeout(function() {
                             chat_menu_heartbeat();
-                        }, fb_chat.settings.heartbeatMenu);
+                        }, fb_chat.conf.heartbeatMenu);
                     }
                 }
             });
@@ -496,7 +489,7 @@
                 if (message !== "") {
                     $.ajax({
                         type: "POST",
-                        url: fb_chat.settings.requestPath + "/fb_chat.php?a=4",
+                        url: fb_chat.conf.requestPath + "/fb_chat.php?a=4",
                         data: {to: tid, message: message},
                         cache: false,
                         dataType: "json",
@@ -521,8 +514,8 @@
                 $(cbta).focus();
                 $(cbta).css('height', '20px');
 
-                fb_chat.settings.heartbeat = fb_chat.settings.heartbeatMin;
-                fb_chat.settings.heartbeatCount = 1;
+                fb_chat.conf.heartbeat = fb_chat.conf.heartbeatMin;
+                fb_chat.conf.heartbeatCount = 1;
             } else {
                 var adjustedHeight = cbta.clientHeight;
                 var maxHeight = 94;
@@ -541,7 +534,7 @@
         };
 
         var get_user_name = function(tid) {
-            $.post(fb_chat.settings.requestPath + "/fb_chat.php?a=5", {
+            $.post(fb_chat.conf.requestPath + "/fb_chat.php?a=5", {
                 tid: tid
             }, function(data) {
                 $("#cb_" + tid + " .tc").html(data.name);

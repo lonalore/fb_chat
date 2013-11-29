@@ -13,26 +13,26 @@ ul.fb_chat_floating_menu li img { border: none; }
 .fbcLaunch { cursor: pointer; }
 .fbcClear { clear: left; }
 
-.chatbox { position: fixed; position: expression("absolute"); width: 250px; display: none; border: none; text-align: left; background-color: #f5f5f5; }
-.chatbox .cbh { position: relative; background-color: #333; padding: 5px; color: #999; }
-.chatbox .cbt { width: 100%; float: left; }
-.chatbox .cbt a { text-decoration: none; color: #f8f8f8; font-weight: bold; font-family: Verdana,Arial,"Bitstream Vera Sans",sans-serif; }
-.chatbox .cbt a:hover { text-decoration: underline;}
-.chatbox .cbt img#setts { position: absolute; top: 8px; right: 28px; cursor: pointer; }
-.chatbox .cbt img#close { position: absolute; top: 8px; right: 6px; cursor: pointer; }
-.chatbox .tc { width: 195px; cursor: pointer; }
-.chatbox .cbb { background-color: #666666; color: #f8f8f8; }
-.chatbox .cbc { font-family: arial,sans-serif; font-size: 13px; color: #333333; height: 200px; width: 234px; overflow-y: auto; overflow-x: auto; padding: 7px; background-color: #ffffff; line-height: 1.3em; text-align: left; border: 1px solid #ccc; border-bottom: none; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); }
-.chatbox .cbi { padding: 0px; background-color: #ffffff; border: 1px solid #ccc; border-bottom: none; }
-.chatbox .cbta { width: 245px; height: 20px; padding: 3px 0pt 3px 3px; margin: 0px; overflow: hidden; border-top: 1px solid #ccc; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); background-color: #fff; }
-.chatbox .cbtaselected {}
-.chatbox .cbmsg { margin-left:1em; }
-.chatbox .cbinf { margin-left: -1em; color: #666666; font-size: 11px; text-align: center; }
-.chatbox .cbmsgfrm { margin-left:-1em; font-weight: bold; }
-.chatbox .cbmsgcnt { word-wrap: break-word; }
-.chatbox .cbopt { position: absolute; right: 10px; }
-.chatbox .cbopt a { text-decoration: none; color: #999; font-weight: bold; font-family: Verdana,Arial,"Bitstream Vera Sans",sans-serif; }
-.chatbox .chatembedcode { margin-left: -1em; padding-top: 5px; padding-bottom: 5px; }
+.cb { position: fixed; position: expression("absolute"); width: 250px; display: none; border: none; text-align: left; background-color: #f5f5f5; }
+.cb .cbh { position: relative; background-color: #333; padding: 5px; color: #999; }
+.cb .cbt { width: 100%; float: left; }
+.cb .cbt a { text-decoration: none; color: #f8f8f8; font-weight: bold; font-family: Verdana,Arial,"Bitstream Vera Sans",sans-serif; }
+.cb .cbt a:hover { text-decoration: underline;}
+.cb .cbt img#setts { position: absolute; top: 8px; right: 28px; cursor: pointer; }
+.cb .cbt img#close { position: absolute; top: 8px; right: 6px; cursor: pointer; }
+.cb .tc { width: 195px; cursor: pointer; }
+.cb .cbb { background-color: #666666; color: #f8f8f8; }
+.cb .cbc { font-family: arial,sans-serif; font-size: 13px; color: #333333; height: 200px; width: 234px; overflow-y: auto; overflow-x: auto; padding: 7px; background-color: #ffffff; line-height: 1.3em; text-align: left; border: 1px solid #ccc; border-bottom: none; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); }
+.cb .cbi { padding: 0px; background-color: #ffffff; border: 1px solid #ccc; border-bottom: none; }
+.cb .cbta { width: 245px; height: 20px; padding: 3px 0pt 3px 3px; margin: 0px; overflow: hidden; border-top: 1px solid #ccc; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); background-color: #fff; }
+.cb .cbtasel {}
+.cb .cbmsg { margin-left:1em; }
+.cb .cbinf { margin-left: -1em; color: #666666; font-size: 11px; text-align: center; }
+.cb .cbmsgfrm { margin-left:-1em; font-weight: bold; }
+.cb .cbmsgcnt { word-wrap: break-word; }
+.cb .cbopt { position: absolute; right: 10px; }
+.cb .cbopt a { text-decoration: none; color: #999; font-weight: bold; font-family: Verdana,Arial,"Bitstream Vera Sans",sans-serif; }
+.cb .chatembedcode { margin-left: -1em; padding-top: 5px; padding-bottom: 5px; }
 
 #com { width: 200px; }
 #com .cbt { font-weight: bold; }
