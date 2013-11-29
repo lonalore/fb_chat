@@ -22,13 +22,15 @@ Screenshots
 ===========
 
 ### Frontend
-![Screenshot 1](http://demo.lonalore.hu/screenshots/fb_chat/01.png?v=3)
+![Screenshot 1](http://demo.lonalore.hu/screenshots/fb_chat/01.png?v=4)
+![Screenshot 2](http://demo.lonalore.hu/screenshots/fb_chat/02.png?v=4)
+![Screenshot 3](http://demo.lonalore.hu/screenshots/fb_chat/03.png?v=4)
 
 ### Admin - Basic settings
-![Screenshot 2](http://demo.lonalore.hu/screenshots/fb_chat/02.png?v=2)
+![Screenshot 4](http://demo.lonalore.hu/screenshots/fb_chat/04.png?v=4)
 
 ### Admin - Chat avatar
-![Screenshot 3](http://demo.lonalore.hu/screenshots/fb_chat/03.png?v=2)
+![Screenshot 5](http://demo.lonalore.hu/screenshots/fb_chat/05.png?v=4)
 
 ### Admin - Appearance
-![Screenshot 4](http://demo.lonalore.hu/screenshots/fb_chat/04.png?v=2)
+![Screenshot 6](http://demo.lonalore.hu/screenshots/fb_chat/06.png?v=4)
