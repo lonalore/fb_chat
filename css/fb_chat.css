@@ -24,7 +24,7 @@ ul.fbcfm li img { border: none; }
 .cb .cbb { background-color: #666666; color: #f8f8f8; }
 .cb .cbc { font-family: arial,sans-serif; font-size: 13px; color: #333333; height: 200px; width: 234px; overflow-y: auto; overflow-x: auto; padding: 7px; background-color: #ffffff; line-height: 1.3em; text-align: left; border: 1px solid #ccc; border-bottom: none; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); }
 .cb .cbi { padding: 0px; background-color: #ffffff; border: 1px solid #ccc; border-bottom: none; }
-.cb .cbta { width: 245px; height: 20px; padding: 3px 0pt 3px 3px; margin: 0px; overflow: hidden; border-top: 1px solid #ccc; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); background-color: #fff; }
+.cb .cbta { width: 245px; height: 20px; padding: 3px 0pt 3px 3px; margin: 0px; overflow: hidden; border-top: 1px solid #ccc; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); background-color: #fff; color: #000; }
 .cb .cbtasel {}
 .cb .cbmsg { margin-left:1em; }
 .cb .cbinf { margin-left: -1em; color: #666666; font-size: 11px; text-align: center; }

@@ -19,8 +19,9 @@
         // Create namespace
         var fb_chat = {};
 
-
         var init = function() {
+            fb_chat.tpl = new Object();
+            
             // Merge options
             fb_chat.conf = $.extend({}, defaults, options);
 
@@ -35,6 +36,15 @@
             fb_chat.conf.windowFocus = true;
             fb_chat.conf.originalTitle = document.title;
             fb_chat.conf.blinkOrder = 0;
+                        
+            fb_chat.tpl.iconClose = '<img id="close" src="' + fb_chat.conf.requestPath + '/images/icon_close.png" width="16" height="16" />';
+            fb_chat.tpl.iconSetts = '<img id="setts" src="' + fb_chat.conf.requestPath + '/images/icon_settings.png" width="16" height="16" />';
+
+            fb_chat.tpl.fltMenu = '<div class="cbh"><div class="cbt"><div class="tc">...</div>' + fb_chat.tpl.iconSetts + '<div class="settscnt"></div></div><br clear="all"/></div><div class="cbc"></div>';
+            fb_chat.tpl.chatBox = '<div class="cbh"><div class="cbt"><div class="tc">...</div>' + fb_chat.tpl.iconSetts + fb_chat.tpl.iconClose + '<div class="settscnt"></div></div><br clear="all"/></div><div class="cbc"></div><div class="cbi"><textarea class="cbta" maxlength="255"></textarea></div>';
+
+            fb_chat.tpl.msgNrm = '<div class="cbmsg"><span class="cbmsgfrm"></span><br /><span class="cbmsgcnt"></span></div>';
+            fb_chat.tpl.msgInf = '<div class="cbmsg"><span class="cbinf"></span></div>';
 
             setup();
         };
@@ -59,25 +69,10 @@
 
 
         var _setup_build_structure_menu = function() {
-            path = fb_chat.conf.requestPath;
-
-            cbHTML = '<div class="cbh">';
-            cbHTML += '<div class="cbt">';
-            cbHTML += '<div class="tc">...</div>';
-            cbHTML += '<img id="setts" src="' + path + '/images/icon_settings.png" width="16" height="16" />';
-
-            cbHTML += '<div class="settscnt">';
-            cbHTML += '</div>';
-
-            cbHTML += '</div>';
-            cbHTML += '<br clear="all"/>';
-            cbHTML += '</div>';
-            cbHTML += '<div class="cbc"></div>';
-
             $("<div />")
                     .attr("id", "cb_com")
                     .addClass("cb")
-                    .html(cbHTML)
+                    .html(fb_chat.tpl.fltMenu)
                     .appendTo($("body"))
                     .css('right', '20px')
                     .css('bottom', '0px')
@@ -89,13 +84,11 @@
                     .css('display', 'none')
                     .ready(function() {
                 // Update content of Floating Menu
-                $.post(path + "/fb_chat.php?a=7", {}, function(data) {
+                $.post(fb_chat.conf.requestPath + "/fb_chat.php?a=7", {}, function(data) {
                     $('#cb_com .cbc').html(data);
-
                     title = fb_chat.conf.floatMenuTitle;
                     title += ' (' + $('#cb_com li').size() + ')';
                     $('#cb_com .tc').html(title);
-
                     // onClick - init Chat (start) event on list items
                     lClass = fb_chat.conf.linkClass;
                     $('#cb_com .cbc li').click(function() {
@@ -148,29 +141,10 @@
                 return;
             }
 
-            path = fb_chat.conf.requestPath;
-
-            cbHTML = '<div class="cbh">';
-            cbHTML += '<div class="cbt">';
-            cbHTML += '<div class="tc">N/A</div>';
-            cbHTML += '<img id="setts" src="' + path + '/images/icon_settings.png" width="16" height="16" />';
-            cbHTML += '<img id="close" src="' + path + '/images/icon_close.png" width="16" height="16" />';
-
-            cbHTML += '<div class="settscnt">';
-            cbHTML += '</div>';
-
-            cbHTML += '</div>';
-            cbHTML += '<br clear="all"/>';
-            cbHTML += '</div>';
-            cbHTML += '<div class="cbc"></div>';
-            cbHTML += '<div class="cbi">';
-            cbHTML += '<textarea class="cbta" maxlength="255"></textarea>';
-            cbHTML += '</div>';
-
             $("<div />")
                     .attr("id", "cb_" + tid)
                     .addClass("cb")
-                    .html(cbHTML)
+                    .html(fb_chat.tpl.chatBox)
                     .appendTo($("body"))
                     .ready(function() {
                 get_user_name(tid);
@@ -418,22 +392,12 @@
                             }
 
                             if (item.s == 2) {
-                                appHTML = '<div class="cbmsg">';
-                                appHTML += '<span class="cbinf">' + item.m + '</span>';
-                                appHTML += '</div>';
-
-                                $("#cb_" + tid + " .cbc").append(appHTML);
+                                $("#cb_" + tid + " .cbc").append(fb_chat.tpl.msgInf);
+                                $("#cb_" + tid + " .cbinf").last().html(item.m);
                             } else {
                                 fb_chat.conf.newMessages[tid] = true;
                                 fb_chat.conf.newMessagesWin[tid] = true;
-
-                                appHTML = '<div class="cbmsg">';
-                                appHTML += '<span class="cbmsgfrm"></span>';
-                                appHTML += '<br />';
-                                appHTML += '<span class="cbmsgcnt"></span>';
-                                appHTML += '</div>';
-
-                                $("#cb_" + tid + " .cbc").append(appHTML);
+                                $("#cb_" + tid + " .cbc").append(fb_chat.tpl.msgNrm);
                                 $("#cb_" + tid + " .cbmsgfrm").last().html(item.f.name).text();
                                 $("#cb_" + tid + " .cbmsgcnt").last().html(item.m);
                             }
@@ -525,20 +489,10 @@
                                 chat_create_chatbox(item.f.id, 1);
                             }
                             if (item.s == 2) {
-                                appHTML = '<div class="cbmsg">';
-                                appHTML += '<span class="cbinf"></span>';
-                                appHTML += '</div>';
-
-                                $("#cb_" + item.f.id + " .cbc").append(appHTML);
+                                $("#cb_" + item.f.id + " .cbc").append(fb_chat.tpl.msgInf);
                                 $("#cb_" + item.f.id + " .cbinf").last().html(item.m);
                             } else {
-                                appHTML = '<div class="cbmsg">';
-                                appHTML += '<span class="cbmsgfrm"></span>';
-                                appHTML += '<br />';
-                                appHTML += '<span class="cbmsgcnt"></span>';
-                                appHTML += '</div>';
-
-                                $("#cb_" + item.f.id + " .cbc").append(appHTML);
+                                $("#cb_" + item.f.id + " .cbc").append(fb_chat.tpl.msgNrm);
                                 $("#cb_" + item.f.id + " .cbmsgfrm").last().html(item.f.name).text();
                                 $("#cb_" + item.f.id + " .cbmsgcnt").last().html(item.m);
                             }
@@ -577,16 +531,9 @@
                         cache: false,
                         dataType: "json",
                         success: function(data) {
-                            cbHTML = '<div class="cbmsg">';
-                            cbHTML += '<span class="cbmsgfrm"></span>';
-                            cbHTML += '<br />';
-                            cbHTML += '<span class="cbmsgcnt"></span>';
-                            cbHTML += '</div>';
-
-                            $("#cb_" + tid + " .cbc").append(cbHTML);
+                            $("#cb_" + tid + " .cbc").append(fb_chat.tpl.msgNrm);
                             $("#cb_" + tid + " .cbmsgfrm").last().html(data.f).text();
                             $("#cb_" + tid + " .cbmsgcnt").last().html(data.m);
-
                             scHeight = $("#cb_" + tid + " .cbc")[0].scrollHeight;
                             $("#cb_" + tid + " .cbc").scrollTop(scHeight);
                         }
