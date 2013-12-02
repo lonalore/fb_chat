@@ -21,7 +21,7 @@ class fb_chat_main {
         
         $sqlFlds = "DISTINCT(online_user_id)";
         $sqlArgs = "online_user_id != 0";
-        //$sqlArgs .= " AND online_user_id != '" . USERID . "." . USERNAME . "'";
+        $sqlArgs .= " AND online_user_id != '" . USERID . "." . USERNAME . "'";
         $rows = $sql->retrieve("online", $sqlFlds, $sqlArgs, TRUE);
         
         $ids = array();
@@ -29,11 +29,17 @@ class fb_chat_main {
             $parts = explode(".", $row['online_user_id']);
             $ids[] = (int) $parts[0];
         }
-        
-        $sqlFlds = "user_id, user_name, user_login";
-        $sqlArgs = "user_id = " . implode(" OR user_id = ", $ids);
-        $rows = $sql->retrieve("user", $sqlFlds, $sqlArgs, TRUE);
                 
+        $sqlArgs1 = "user_id = " . implode(" OR user_id = ", $ids);
+        
+        $query = 'SELECT user_id, user_name, user_login FROM #user AS u
+            LEFT JOIN #fb_chat_turnedoff AS t ON t.fb_chat_turnedoff_uid = u.user_id
+            WHERE ' . $sqlArgs1 . ' 
+                AND (fb_chat_turnedoff_uid = "" OR fb_chat_turnedoff_uid IS NULL) 
+            ORDER BY u.user_name ASC';
+
+        $rows = $sql->retrieve($query, TRUE);
+        
         foreach ($rows as $row) {
             $users[] = array(
                 'id' => $row['user_id'],
@@ -42,6 +48,15 @@ class fb_chat_main {
         }
                 
         return $users;
+    }
+    
+    public function get_chat_status($uid) {
+        $count = e107::getDb()->count("fb_chat_turnedoff", "(*)", "fb_chat_turnedoff_uid = " . (int) $uid);
+        if ($count > 0) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
     
     public function get_user_name_by_names($user_name = "", $disp_name = "", $name = "N/A") {

@@ -12,7 +12,15 @@
         heartbeatMax: 30000,
         heartbeatMenu: 30000,
         floatMenu: 1,
-        floatMenuTitle: "Online"
+        status: 1,
+        lans: {
+            online: 'Online',
+            offline: 'Offline',
+            turnon: 'Turn on chat',
+            turnoff: 'Turn off chat',
+            offmsg: 'The chat is currently disabled.',
+            nouser: 'There is no online users.'
+        }
     };
 
     $.fn.fb_chat = function(options) {
@@ -21,7 +29,7 @@
 
         var init = function() {
             fb_chat.tpl = new Object();
-            
+
             // Merge options
             fb_chat.conf = $.extend({}, defaults, options);
 
@@ -36,12 +44,12 @@
             fb_chat.conf.windowFocus = true;
             fb_chat.conf.originalTitle = document.title;
             fb_chat.conf.blinkOrder = 0;
-                        
+
             fb_chat.tpl.iconClose = '<img id="close" src="' + fb_chat.conf.requestPath + '/images/icon_close.png" width="16" height="16" />';
             fb_chat.tpl.iconSetts = '<img id="setts" src="' + fb_chat.conf.requestPath + '/images/icon_settings.png" width="16" height="16" />';
 
             fb_chat.tpl.fltMenu = '<div class="cbh"><div class="cbt"><div class="tc">...</div>' + fb_chat.tpl.iconSetts + '<div class="settscnt"></div></div><br clear="all"/></div><div class="cbc"></div>';
-            fb_chat.tpl.chatBox = '<div class="cbh"><div class="cbt"><div class="tc">...</div>' + fb_chat.tpl.iconSetts + fb_chat.tpl.iconClose + '<div class="settscnt"></div></div><br clear="all"/></div><div class="cbc"></div><div class="cbi"><textarea class="cbta" maxlength="255"></textarea></div>';
+            fb_chat.tpl.chatBox = '<div class="cbh"><div class="cbt"><div class="tc">...</div>' + fb_chat.tpl.iconClose + '<div class="settscnt"></div></div><br clear="all"/></div><div class="cbc"></div><div class="cbi"><textarea class="cbta" maxlength="255"></textarea></div>';
 
             fb_chat.tpl.msgNrm = '<div class="cbmsg"><span class="cbmsgfrm"></span><br /><span class="cbmsgcnt"></span></div>';
             fb_chat.tpl.msgInf = '<div class="cbmsg"><span class="cbinf"></span></div>';
@@ -51,24 +59,24 @@
 
 
         var setup = function() {
-            _setup_build_structure();
-            _setup_init_events();
+            setup_build_structure();
+            setup_init_events();
             chat_start_session();
         };
 
 
-        var _setup_build_structure = function() {
+        var setup_build_structure = function() {
             $('body').wrapInner(function() {
                 return '<div id="FBChatMain"></div>';
             });
 
             if (fb_chat.conf.floatMenu == 1) {
-                _setup_build_structure_menu();
+                setup_build_structure_menu();
             }
         };
 
 
-        var _setup_build_structure_menu = function() {
+        var setup_build_structure_menu = function() {
             $("<div />")
                     .attr("id", "cb_com")
                     .addClass("cb")
@@ -83,19 +91,6 @@
                     .find('.cbt img')
                     .css('display', 'none')
                     .ready(function() {
-                // Update content of Floating Menu
-                $.post(fb_chat.conf.requestPath + "/fb_chat.php?a=7", {}, function(data) {
-                    $('#cb_com .cbc').html(data);
-                    title = fb_chat.conf.floatMenuTitle;
-                    title += ' (' + $('#cb_com li').size() + ')';
-                    $('#cb_com .tc').html(title);
-                    // onClick - init Chat (start) event on list items
-                    lClass = fb_chat.conf.linkClass;
-                    $('#cb_com .cbc li').click(function() {
-                        chat_start_conversation($(this).find('.' + lClass));
-                    });
-                });
-
                 // onClick - Show/Hide Floating Menu
                 $("#cb_com .tc").click(function() {
                     chat_toggle_floating_menu();
@@ -109,7 +104,7 @@
         };
 
 
-        var _setup_init_events = function() {
+        var setup_init_events = function() {
             var launchClass = fb_chat.conf.linkClass;
             $('.' + launchClass).click(function() {
                 chat_start_conversation(this);
@@ -244,6 +239,31 @@
 
         var chat_toggle_settings_panel = function(tid) {
             if ($("#cb_" + tid + " .settscnt").css('display') == "none") {
+                // Floating menu settings...
+                if (tid == "com") {
+                    aH = '<ul>';
+                    if (fb_chat.conf.status == "1") {
+                        aH += '<li class="onoff">' + fb_chat.conf.lans.turnoff + '</li>';
+                    } else {
+                        aH += '<li class="onoff">' + fb_chat.conf.lans.turnon + '</li>';
+                    }
+                    aH += '</ul>';
+
+                    $("#cb_" + tid + " .settscnt").html(aH).ready(function() {
+                        if (fb_chat.conf.status == "1") {
+                            $("#cb_" + tid + " .settscnt").find(".onoff").click(function() {
+                                chat_turn_off();
+                                $("#cb_" + tid + " .settscnt").css('display', 'none');
+                            });
+                        } else {
+                            $("#cb_" + tid + " .settscnt").find(".onoff").click(function() {
+                                chat_turn_on();
+                                $("#cb_" + tid + " .settscnt").css('display', 'none');
+                            });
+                        }
+                    });
+                }
+
                 $("#cb_" + tid + " .settscnt").css('display', 'block');
             } else {
                 $("#cb_" + tid + " .settscnt").css('display', 'none');
@@ -335,6 +355,13 @@
 
 
         var chat_heartbeat = function() {
+            if (fb_chat.conf.status == "0") {
+                setTimeout(function() {
+                    chat_heartbeat();
+                }, fb_chat.conf.heartbeatMax);
+                return;
+            }
+
             var itemsfound = 0;
 
             if (fb_chat.conf.windowFocus == false) {
@@ -431,44 +458,7 @@
 
 
         var chat_menu_heartbeat = function() {
-            lClass = fb_chat.conf.linkClass;
-
-            if ($('.fbcmw').length > 0) {
-                $.ajax({
-                    url: fb_chat.conf.requestPath + "/fb_chat.php?a=6",
-                    cache: false,
-                    dataType: "html",
-                    success: function(data) {
-                        // update normal menu content
-                        $('.fbcmw').html(data);
-                        // onClick - Set Chat (start) event on list items
-                        $('.fbcmw .' + lClass).click(function() {
-                            chat_start_conversation(this);
-                        });
-                    }
-                });
-            }
-
-            if (fb_chat.conf.floatMenu == 1) {
-                $.ajax({
-                    url: fb_chat.conf.requestPath + "/fb_chat.php?a=7",
-                    cache: false,
-                    dataType: "html",
-                    success: function(data) {
-                        // update floating menu content
-                        $('#com .cbc').html(data);
-                        // onClick - Set Chat (start) event on list items
-                        $('#com .cbc li').click(function() {
-                            chat_start_conversation($(this).find('.' + lClass));
-                        });
-                        // update floating menu title
-                        title = fb_chat.conf.floatMenuTitle;
-                        title += ' (' + $('#com li').size() + ')';
-                        $('#com .tc').html(title);
-                    }
-                });
-            }
-
+            chat_menu_heartbeat_worker();
             if (fb_chat.conf.floatMenu == 1 || $('.fbcmw').length > 0) {
                 setTimeout(function() {
                     chat_menu_heartbeat();
@@ -477,7 +467,70 @@
         };
 
 
+        var chat_menu_heartbeat_worker = function() {
+            if (fb_chat.conf.status == "0") {
+                aH = '<p class="offmsg">' + fb_chat.conf.lans.offmsg + '</p>';
+                if ($('.fbcmw').length > 0) {
+                    $('.fbcmw').html(aH);
+                }
+                if (fb_chat.conf.floatMenu == 1) {
+                    $('#cb_com .cbc').html(aH);
+                    $('#cb_com .tc').html(fb_chat.conf.lans.offline);
+                }
+            } else {
+                lClass = fb_chat.conf.linkClass;
+                if ($('.fbcmw').length > 0) {
+                    $.ajax({
+                        url: fb_chat.conf.requestPath + "/fb_chat.php?a=6",
+                        cache: false,
+                        dataType: "html",
+                        success: function(data) {
+                            if (data == "") {
+                                data = '<p class="offmsg">' + fb_chat.conf.lans.nouser + '</p>';
+                            }
+                            // update normal menu content
+                            $('.fbcmw').empty().html(data);
+                            // onClick - Set Chat (start) event on list items
+                            $('.fbcmw .' + lClass).click(function() {
+                                chat_start_conversation(this);
+                            });
+                        }
+                    });
+                }
+
+                if (fb_chat.conf.floatMenu == 1) {
+                    $.ajax({
+                        url: fb_chat.conf.requestPath + "/fb_chat.php?a=7",
+                        cache: false,
+                        dataType: "html",
+                        success: function(data) {
+                            if (data == "") {
+                                data = '<p class="offmsg">' + fb_chat.conf.lans.nouser + '</p>';
+                            }
+                            // update floating menu content
+                            $('#cb_com .cbc').empty().html(data);
+                            // onClick - Set Chat (start) event on list items
+                            $('#cb_com .cbc li').click(function() {
+                                chat_start_conversation($(this).find('.' + lClass));
+                            });
+                            // update floating menu title
+                            title = fb_chat.conf.lans.online;
+                            title += ' (' + $('#cb_com .cbc li').size() + ')';
+                            $('#cb_com .tc').html(title);
+                        }
+                    });
+                }
+            }
+        };
+
+
         var chat_start_session = function() {
+            if (fb_chat.conf.status == "0") {
+                chat_heartbeat();
+                chat_menu_heartbeat();
+                return;
+            }
+
             $.ajax({
                 url: fb_chat.conf.requestPath + "/fb_chat.php?a=1",
                 cache: false,
@@ -510,10 +563,35 @@
                     }, fb_chat.conf.heartbeat);
 
                     if (fb_chat.conf.floatMenu == 1 || $('.fbcmw').length > 0) {
-                        setTimeout(function() {
-                            chat_menu_heartbeat();
-                        }, fb_chat.conf.heartbeatMenu);
+                        chat_menu_heartbeat();
                     }
+                }
+            });
+        };
+
+
+        var chat_turn_off = function() {
+            $.ajax({
+                url: fb_chat.conf.requestPath + "/fb_chat.php?a=9",
+                cache: false,
+                dataType: "html",
+                success: function(data) {
+                    fb_chat.conf.status = 0;
+                    chat_menu_heartbeat_worker();
+                }
+            });
+        };
+
+
+        var chat_turn_on = function() {
+            $.ajax({
+                url: fb_chat.conf.requestPath + "/fb_chat.php?a=8",
+                cache: false,
+                dataType: "html",
+                success: function(data) {
+                    fb_chat.conf.status = 1;
+                    fb_chat.conf.heartbeat = fb_chat.conf.heartbeatMin;
+                    chat_menu_heartbeat_worker();
                 }
             });
         };

@@ -17,7 +17,7 @@ if (!session_id()) {
 
 /**
  * fb_chat class
- * 
+ *
  * Handling Ajax Requests arrive from Frontend
  */
 class fb_chat extends fb_chat_main {
@@ -47,6 +47,8 @@ class fb_chat extends fb_chat_main {
          * 5 - get username
          * 6 - get (normal) menu content
          * 7 - get (floating) menu content
+         * 8 - Turn chat on
+         * 9 - Turn chat off
          */
         $action = (int) $_GET['a'];
 
@@ -71,6 +73,12 @@ class fb_chat extends fb_chat_main {
                 break;
             case 7:
                 $this->get_online_list(1);
+                break;
+            case 8:
+                $this->turn_chat_on();
+                break;
+            case 9:
+                $this->turn_chat_off();
                 break;
             default:
                 exit;
@@ -288,28 +296,41 @@ class fb_chat extends fb_chat_main {
 
         $users = $this->get_online_users();
         $menu = "";
-        
-        if ((int) $mode === 0) {
-            $menu .= $tp->parseTemplate($template['MENU_START']);
-            foreach ($users as $user) {
-                $sc->setVars($user);
-                $menu .= $tp->parseTemplate($template['MENU_ITEM'], TRUE, $sc);
+
+        if (!empty($users)) {
+            if ((int) $mode === 0) {
+                $menu .= $tp->parseTemplate($template['MENU_START']);
+                foreach ($users as $user) {
+                    $sc->setVars($user);
+                    $menu .= $tp->parseTemplate($template['MENU_ITEM'], TRUE, $sc);
+                }
+                $menu .= $tp->parseTemplate($template['MENU_END']);
             }
-            $menu .= $tp->parseTemplate($template['MENU_END']);
-        }
-        
-        if ((int) $mode === 1) {
-            $menu .= $tp->parseTemplate($template['FLOAT_MENU_START']);
-            foreach ($users as $user) {
-                $sc->setVars($user);
-                $menu .= $tp->parseTemplate($template['FLOAT_MENU_ITEM'], TRUE, $sc);
+
+            if ((int) $mode === 1) {
+                $menu .= $tp->parseTemplate($template['FLOAT_MENU_START']);
+                foreach ($users as $user) {
+                    $sc->setVars($user);
+                    $menu .= $tp->parseTemplate($template['FLOAT_MENU_ITEM'], TRUE, $sc);
+                }
+                $menu .= $tp->parseTemplate($template['FLOAT_MENU_END']);
             }
-            $menu .= $tp->parseTemplate($template['FLOAT_MENU_END']);
         }
-        
+
         header('Content-Type: text/html; charset=utf-8');
         echo $menu;
         exit;
+    }
+
+    public function turn_chat_on() {
+        e107::getDb()->delete("fb_chat_turnedoff", "fb_chat_turnedoff_uid = " . USERID);
+    }
+
+    public function turn_chat_off() {
+        $arg = array(
+            "fb_chat_turnedoff_uid" => USERID,
+        );
+        e107::getDb()->insert('fb_chat_turnedoff', $arg);
     }
 
 }

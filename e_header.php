@@ -35,14 +35,28 @@ class fb_chat_e_header extends fb_chat_main {
             'heartbeatMax' => vartrue($conf['fb_chat_hb_max'], 30) * 1000,
             'heartbeatMenu' => vartrue($conf['fb_chat_hb_menu'], 30) * 1000,
             'floatMenu' => vartrue($conf['fb_chat_fm'], 1),
-            'floatMenuTitle' => LANF_FB_CHAT_04,
+            'status' => $this->get_chat_status(USERID),
         );
         
         foreach($opts as $key => $value) {
             $this->jsOptions .= $key . ': "' . $value . '",';
         }
         
+        $lans = array(
+            'online' => LANF_FB_CHAT_04,
+            'offline' => LANF_FB_CHAT_05,
+            'turnon' => LANF_FB_CHAT_07,
+            'turnoff' => LANF_FB_CHAT_06,
+            'offmsg' => LANF_FB_CHAT_08,
+            'nouser' => LANF_FB_CHAT_09,
+        );
+        
+        $this->jsOptions .= 'lans: {';
+        foreach($lans as $key => $value) {
+            $this->jsOptions .= $key . ': "' . $value . '",';
+        }        
         $this->jsOptions = substr($this->jsOptions, 0, -1);
+        $this->jsOptions .= '}';
     }
 
     function include_components() {
