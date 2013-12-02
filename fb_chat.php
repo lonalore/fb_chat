@@ -327,9 +327,7 @@ class fb_chat extends fb_chat_main {
     }
 
     public function turn_chat_off() {
-        $arg = array(
-            "fb_chat_turnedoff_uid" => USERID,
-        );
+        $arg = array("fb_chat_turnedoff_uid" => USERID);
         e107::getDb()->insert('fb_chat_turnedoff', $arg);
     }
 

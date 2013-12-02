@@ -34,7 +34,6 @@ ul.fbcfm li img { border: none; }
 .cb .cbopt { position: absolute; right: 10px; }
 .cb .cbopt a { text-decoration: none; color: #999; font-weight: bold; font-family: Verdana,Arial,"Bitstream Vera Sans",sans-serif; }
 .cb .chatembedcode { margin-left: -1em; padding-top: 5px; padding-bottom: 5px; }
-
 .cb .settscnt { position: absolute; display: none; width: 240px; height: 60px; background-color: #f3f3f3; top: 30px; right: 1px; border-left: 1px solid #ccc; border-bottom: 1px solid #ccc; }
 
 #cb_com { width: 200px; }

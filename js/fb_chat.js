@@ -49,7 +49,7 @@
             fb_chat.tpl.iconSetts = '<img id="setts" src="' + fb_chat.conf.requestPath + '/images/icon_settings.png" width="16" height="16" />';
 
             fb_chat.tpl.fltMenu = '<div class="cbh"><div class="cbt"><div class="tc">...</div>' + fb_chat.tpl.iconSetts + '<div class="settscnt"></div></div><br clear="all"/></div><div class="cbc"></div>';
-            fb_chat.tpl.chatBox = '<div class="cbh"><div class="cbt"><div class="tc">...</div>' + fb_chat.tpl.iconClose + '<div class="settscnt"></div></div><br clear="all"/></div><div class="cbc"></div><div class="cbi"><textarea class="cbta" maxlength="255"></textarea></div>';
+            fb_chat.tpl.chatBox = '<div class="cbh"><div class="cbt"><div class="tc">...</div>' + fb_chat.tpl.iconClose + '</div><br clear="all"/></div><div class="cbc"></div><div class="cbi"><textarea class="cbta" maxlength="255"></textarea></div>';
 
             fb_chat.tpl.msgNrm = '<div class="cbmsg"><span class="cbmsgfrm"></span><br /><span class="cbmsgcnt"></span></div>';
             fb_chat.tpl.msgInf = '<div class="cbmsg"><span class="cbinf"></span></div>';
