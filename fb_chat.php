@@ -322,10 +322,18 @@ class fb_chat extends fb_chat_main {
         exit;
     }
 
+    /**
+     * Turn on chat by current user.
+     * Delete record from "turned off" table.
+     */
     public function turn_chat_on() {
         e107::getDb()->delete("fb_chat_turnedoff", "fb_chat_turnedoff_uid = " . USERID);
     }
 
+    /**
+     * Turn off chat by crrent user.
+     * Insert row into "turned off" table.
+     */
     public function turn_chat_off() {
         $arg = array("fb_chat_turnedoff_uid" => USERID);
         e107::getDb()->insert('fb_chat_turnedoff', $arg);

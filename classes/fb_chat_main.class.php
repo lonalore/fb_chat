@@ -2,6 +2,13 @@
 
 class fb_chat_main {
 
+    /**
+     * Check permissions of current user
+     * 
+     * @return boolean
+     *  TRUE: Access granted
+     *  FALSE: Access denied
+     */
     public function check_permission() {
         if (USERID == 0) {
             return FALSE;
@@ -16,6 +23,14 @@ class fb_chat_main {
         return TRUE;
     }
 
+    /**
+     * Get online users. (where chat is turned on)
+     * 
+     * @param array $users
+     *  Empty array to store online users.
+     * @return array $users
+     *  Associative array with details of online users (ID and Name).
+     */
     public function get_online_users($users = array()) {
         $sql = e107::getDb();
 
@@ -31,13 +46,11 @@ class fb_chat_main {
         }
 
         $sqlArgs1 = "user_id = " . implode(" OR user_id = ", $ids);
-
         $query = 'SELECT user_id, user_name, user_login FROM #user AS u
             LEFT JOIN #fb_chat_turnedoff AS t ON t.fb_chat_turnedoff_uid = u.user_id
             WHERE ' . $sqlArgs1 . '
                 AND (fb_chat_turnedoff_uid = "" OR fb_chat_turnedoff_uid IS NULL)
             ORDER BY u.user_name ASC';
-
         $rows = $sql->retrieve($query, TRUE);
 
         foreach ($rows as $row) {
@@ -50,6 +63,15 @@ class fb_chat_main {
         return $users;
     }
 
+    /**
+     * Get chat status by user.
+     * 
+     * @param int $uid
+     *  User ID
+     * @return int
+     *  0: Chat is turned off
+     *  1: Chat is turned on
+     */
     public function get_chat_status($uid) {
         $count = e107::getDb()->count("fb_chat_turnedoff", "(*)", "fb_chat_turnedoff_uid = " . (int) $uid);
         if ($count > 0) {
@@ -59,7 +81,19 @@ class fb_chat_main {
         }
     }
 
-    public function get_user_name_by_names($user_name = "", $disp_name = "", $name = "N/A") {
+    /**
+     * Decide which name to use.
+     * 
+     * @param string $user_name
+     *  Username
+     * @param string $disp_name
+     *  Display name
+     * @param string $name
+     *  Default return value.
+     * @return string $name
+     *  Name, which appears in chatbox.
+     */
+    public function get_user_name_by_names($user_name = "", $disp_name = "", $name = "...") {
         if ($user_name == "" && $disp_name == "") {
             return $name;
         }
@@ -70,7 +104,7 @@ class fb_chat_main {
             $name = $disp_name;
         }
 
-        if ($name == "N/A" || $name == "") {
+        if ($name == "..." || $name == "") {
             $name = $user_name;
         }
 
@@ -78,14 +112,16 @@ class fb_chat_main {
     }
 
     /**
-     * Get chat display name by the obtained User ID
+     * Get chat display name by the obtained User ID. Decide which name to use.
+     * 
      * @param int $uid
      *  User ID
      * @param string $name
      *  Default return value
      * @return string $name
+     *  Name, which appears in chatbox.
      */
-    public function get_user_name_by_id($uid = 0, $name = "N/A") {
+    public function get_user_name_by_id($uid = 0, $name = "...") {
         if ((int) $uid === 0) {
             return $name;
         }
@@ -99,7 +135,7 @@ class fb_chat_main {
             }
         }
 
-        if ($name == "N/A" || $name == "") {
+        if ($name == "..." || $name == "") {
             $row = get_user_data(intval($uid));
             if (isset($row['user_name'])) {
                 $name = $row['user_name'];
@@ -109,6 +145,14 @@ class fb_chat_main {
         return $name;
     }
 
+    /**
+     * Parse output HTML.
+     * 
+     * @param string $text
+     *  Input string.
+     * @return string $text
+     *  Output (HTML) string.
+     */
     public function handle_output($text) {
         $tp = e107::getParser();
         $opts = $this->handle_output_get_opts();
@@ -120,6 +164,14 @@ class fb_chat_main {
         return $text;
     }
 
+    /**
+     * Get options for parsing output string.
+     * 
+     * @param string $opts
+     *  Default return value.
+     * @return string $opts
+     *  Options for methode toHTML().
+     */
     public function handle_output_get_opts($opts = "") {
         $emote = vartrue($this->plugPrefs['fb_chat_emote'], 0);
         if ((int) $emote === 1) {
@@ -138,6 +190,15 @@ class fb_chat_main {
         return $opts;
     }
 
+    /**
+     * Implementation of Class AutoEmbed. Try to parse URLs and
+     * get embed Audio/Video.
+     * 
+     * @param string $text
+     *  Input string
+     * @return string $text
+     *  Output string
+     */
     public function handle_output_embed_videos($text) {
         $emb = vartrue($this->plugPrefs['fb_chat_embed_videos'], 0);
         if ((int) $emb === 0) {
@@ -167,11 +228,31 @@ class fb_chat_main {
         return $text;
     }
 
+    /**
+     * Try to get URLs from a string.
+     * 
+     * @param string $string
+     *  Input string.
+     * @param array $matches
+     *  Default return array.
+     * @return array $matches
+     *  Array contains URLs. Or an empty array.
+     */
     public function get_urls_from_string($string = "", $matches = array()) {
         preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $string, $matches);
         return array_unique($matches);
     }
 
+    /**
+     * Get new messages from DB by UID.
+     * 
+     * @param int $uid
+     *  User ID.
+     * @param array $messages
+     *  Default return array.
+     * @return array $messages
+     *  Array with messages. Or an empty array.
+     */
     public function get_new_messages($uid = 0, $messages = array()) {
         if ((int) $uid === 0) {
             return $messages;
@@ -190,6 +271,14 @@ class fb_chat_main {
         return $messages;
     }
 
+    /**
+     * Sanitize strong for JSON output.
+     * 
+     * @param string $text
+     *  Input string.
+     * @return string $text
+     *  Sanitized output string.
+     */
     public function sanitize_string($text) {
         $text = htmlspecialchars($text, ENT_QUOTES);
         $text = str_replace("\n\r", "\n", $text);

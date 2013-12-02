@@ -25,9 +25,13 @@ class fb_chat_e_header extends fb_chat_main {
         $this->include_components();
     }
 
+    /**
+     * Get chat settings and language texts for JavaScript
+     */
     function get_js_options() {
         $conf = $this->plugPrefs;
 
+        // Pass default chat configs to JavaScript
         $opts = array(
             'linkClass' => vartrue($conf['fb_chat_launch'], 'fbcLaunch'),
             'requestPath' => e_PLUGIN_ABS . 'fb_chat',
@@ -42,6 +46,7 @@ class fb_chat_e_header extends fb_chat_main {
             $this->jsOptions .= $key . ': "' . $value . '",';
         }
 
+        // Pass language texts to JavaScript
         $lans = array(
             'online' => LANF_FB_CHAT_04,
             'offline' => LANF_FB_CHAT_05,
@@ -59,6 +64,9 @@ class fb_chat_e_header extends fb_chat_main {
         $this->jsOptions .= '}';
     }
 
+    /**
+     * Include necessary CSS and JS files
+     */
     function include_components() {
         $inlineJS = '$(document).fb_chat({ ' . $this->jsOptions . ' });';
         $inlineJS = '$(document).ready(function() { ' . $inlineJS . ' });';
