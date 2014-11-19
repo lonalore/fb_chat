@@ -8,7 +8,7 @@ Requirements:
 
 ### Questions about this project?
 
-You can always contact me at `info@lonalore.hu`, if you have any question or queries about the project. 
+You can always contact me at `info@lonalore.hu`, if you have any question or queries about the project.
 
 Please feel free to report any bug found. Pull requests, issues, and plugin recommendations are more than welcome!
 
