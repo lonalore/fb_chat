@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Definition of english strings for area Frontend.
+ */
 
 define('LANF_FB_CHAT_01', 'Chat with users');
 define('LANF_FB_CHAT_02', 'List of users...');

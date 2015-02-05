@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Class installations to handle configuration forms on Admin UI.
+ */
 
 require_once('../../class2.php');
 
@@ -8,16 +12,19 @@ if (!getperms('P')) {
 }
 
 // [PLUGINS]/fb_chat/languages/[LANGUAGE]/[LANGUAGE]_admin.php
-e107::lan('fb_chat', true, true);
+e107::lan('fb_chat', TRUE, TRUE);
 // Include core lan file to get Date Formats
 e107::includeLan(e_LANGUAGEDIR . e_LANGUAGE . '/admin/lan_prefs.php');
 
+/**
+ * Class fb_chat_admin.
+ */
 class fb_chat_admin extends e_admin_dispatcher {
 
   protected $modes = array(
     'main' => array(
       'controller' => 'fb_chat_admin_ui',
-      'path' => null,
+      'path' => NULL,
     ),
   );
   protected $adminMenu = array(
@@ -30,6 +37,9 @@ class fb_chat_admin extends e_admin_dispatcher {
 
 }
 
+/**
+ * Class fb_chat_admin_ui.
+ */
 class fb_chat_admin_ui extends e_admin_ui {
 
   protected $pluginTitle = LAN_PLUGIN__FB_CHAT_NAME;
@@ -185,4 +195,3 @@ require_once(e_ADMIN . "auth.php");
 e107::getAdminUI()->runPage();
 require_once(e_ADMIN . "footer.php");
 exit;
-?>

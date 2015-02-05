@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Class installation to display menu block.
+ */
 
 if (!defined('e107_INIT')) {
   exit;
@@ -8,11 +12,15 @@ if (!plugInstalled('fb_chat')) {
   exit;
 }
 
+// Include main fb_chat class.
 require_once("classes/fb_chat_main.class.php");
 
 // [PLUGINS]/fb_chat/languages/[LANGUAGE]/[LANGUAGE]_front.php
-e107::lan('fb_chat', false, true);
+e107::lan('fb_chat', FALSE, TRUE);
 
+/**
+ * Class fb_chat_menu.
+ */
 class fb_chat_menu extends fb_chat_main {
 
   private $onlineList = array();
@@ -20,8 +28,6 @@ class fb_chat_menu extends fb_chat_main {
 
   /**
    * List online users after check current user permission.
-   *
-   * @return
    */
   function __construct() {
     $this->plugPrefs = e107::getPlugConfig('fb_chat')->getPref();
@@ -57,5 +63,5 @@ class fb_chat_menu extends fb_chat_main {
 
 }
 
+// Class installation.
 new fb_chat_menu();
-?>

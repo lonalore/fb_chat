@@ -1,16 +1,21 @@
 <?php
+/**
+ * @file
+ * Class installation to handle ajax request arrived from area Frontend.
+ */
 
 require_once("../../class2.php");
 if (!plugInstalled('fb_chat')) {
   exit;
 }
 
+// Include main fb_chat class.
 require_once("classes/fb_chat_main.class.php");
 
 // [PLUGINS]/fb_chat/languages/[LANGUAGE]/[LANGUAGE]_front.php
-e107::lan('fb_chat', false, true);
+e107::lan('fb_chat', FALSE, TRUE);
 
-//start session if required
+// Start session if required.
 if (!session_id()) {
   session_start();
 }
@@ -18,7 +23,7 @@ if (!session_id()) {
 /**
  * fb_chat class
  *
- * Handling Ajax Requests arrive from Frontend
+ * Handling Ajax Requests arrived from area Frontend.
  */
 class fb_chat extends fb_chat_main {
 
@@ -171,7 +176,8 @@ class fb_chat extends fb_chat_main {
       }
     }
 
-    e107::getDb()->update("fb_chat", "fb_chat_rcd = 1 WHERE fb_chat_to = " . USERID . " AND fb_chat_rcd = 0 ");
+    e107::getDb()
+      ->update("fb_chat", "fb_chat_rcd = 1 WHERE fb_chat_to = " . USERID . " AND fb_chat_rcd = 0 ");
 
     if (!empty($items)) {
       $items = substr($items, 0, -1);
@@ -327,7 +333,8 @@ class fb_chat extends fb_chat_main {
    * Delete record from "turned off" table.
    */
   public function turn_chat_on() {
-    e107::getDb()->delete("fb_chat_turnedoff", "fb_chat_turnedoff_uid = " . USERID);
+    e107::getDb()
+      ->delete("fb_chat_turnedoff", "fb_chat_turnedoff_uid = " . USERID);
   }
 
   /**
@@ -341,4 +348,5 @@ class fb_chat extends fb_chat_main {
 
 }
 
+// Class installation.
 new fb_chat;

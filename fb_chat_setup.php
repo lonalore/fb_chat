@@ -1,5 +1,12 @@
 <?php
+/**
+ * @file
+ * Installation hooks and callbacks of fb_chat plugin.
+ */
 
+/**
+ * Class fb_chat_setup.
+ */
 class fb_chat_setup {
 
   /**
@@ -7,7 +14,7 @@ class fb_chat_setup {
    * by the fb_chat_sql.php file.
    */
   function install_pre($var) {
-    
+
   }
 
   /**
@@ -15,21 +22,19 @@ class fb_chat_setup {
    * by the fb_chat_sql.php file.
    */
   function install_post($var) {
-    
+
   }
 
   function uninstall_options() {
-    
+
   }
 
   function uninstall_post($var) {
-    
+
   }
 
   function upgrade_post($var) {
-    
+
   }
 
 }
-
-?>

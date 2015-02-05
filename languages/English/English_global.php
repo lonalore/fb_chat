@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Definition of english strings for common usage.
+ */
 
 define("LAN_PLUGIN__FB_CHAT_NAME", "FB Chat");
 define("LAN_PLUGIN__FB_CHAT_SUMM", "Facebook styled chat");

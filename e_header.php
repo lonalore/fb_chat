@@ -1,14 +1,23 @@
 <?php
+/**
+ * @file
+ * Class instantiation to prepare JavaScript configurations and include css/js
+ * files to page header.
+ */
 
 if (!defined('e107_INIT')) {
   exit;
 }
 
+// Load required main class of plugin.
 require_once("classes/fb_chat_main.class.php");
 
-// [PLUGINS]/fb_chat/languages/[LANGUAGE]/[LANGUAGE]_front.php
-e107::lan('fb_chat', false, true);
+// Use [PLUGINS]/fb_chat/languages/[LANGUAGE]/[LANGUAGE]_front.php file.
+e107::lan('fb_chat', FALSE, TRUE);
 
+/**
+ * Class fb_chat_e_header.
+ */
 class fb_chat_e_header extends fb_chat_main {
 
   protected $plugPrefs = array();
@@ -73,10 +82,10 @@ class fb_chat_e_header extends fb_chat_main {
 
     e107::css('fb_chat', 'css/fb_chat.css');
     e107::css('fb_chat', 'css/fb_chat_screen.css');
-    e107::css('fb_chat', 'css/fb_chat_screen_ie.css', null, 'all', '<!--[if lte IE 7]>', '<![endif]-->');
+    e107::css('fb_chat', 'css/fb_chat_screen_ie.css', NULL, 'all', '<!--[if lte IE 7]>', '<![endif]-->');
 
-    // TODO: Need to fix bootstrap theme's CSS style because of chat wrapper...
-    // TODO: Make an option on Admin UI for this
+    // TODO: Need to fix bootstrap theme's CSS style because of chat wrapper.
+    // TODO: Make an option on Admin UI for this.
     //e107::css('fb_chat', 'css/fix/fb_chat__bootstrap.css');
 
     e107::js('fb_chat', 'js/fb_chat.js', 'jquery');
@@ -85,5 +94,5 @@ class fb_chat_e_header extends fb_chat_main {
 
 }
 
+// Class instantiation.
 new fb_chat_e_header;
-?>

@@ -1,15 +1,22 @@
 <?php
+/**
+ * @file
+ * Class installation to define shortcodes.
+ */
 
 if (!defined('e107_INIT')) {
   exit;
 }
 
+/**
+ * Class fb_chat_shortcodes.
+ */
 class fb_chat_shortcodes extends e_shortcode {
 
   private $plugPrefs = array();
   private $avatar_mw = 0;
   private $avatar_mh = 0;
-  private $avatar_m = null;
+  private $avatar_m = NULL;
 
   function __construct() {
     $this->plugPrefs = e107::getPlugConfig('fb_chat')->getPref();
@@ -89,13 +96,13 @@ class fb_chat_shortcodes extends e_shortcode {
     // set default avatar
     $avatar = vartrue($defAvat, $genAvat);
     // get source url for default avatar
-    $src = $tp->thumbUrl($avatar, $params, true);
+    $src = $tp->thumbUrl($avatar, $params, TRUE);
 
     if ((int) $uid > 0) {
       $row = get_user_data(intval($uid));
       $image = $row['user_image'];
       if (vartrue($image)) {
-        if (strpos($image, "://") !== false) {
+        if (strpos($image, "://") !== FALSE) {
           $src = $image;
         }
         elseif (substr($image, 0, 8) == "-upload-") {

@@ -75,29 +75,29 @@
 
     var setup_build_structure_menu = function () {
       $("<div />")
-          .attr("id", "cb_com")
-          .addClass("cb")
-          .html(fb_chat.tpl.fltMenu)
-          .appendTo($("body"))
-          .css('right', '20px')
-          .css('bottom', '0px')
-          .css('display', 'block')
-          .find('.cbc')
-          .css('display', 'none')
-          .parent()
-          .find('.cbt img')
-          .css('display', 'none')
-          .ready(function () {
-            // onClick - Show/Hide Floating Menu
-            $("#cb_com .tc").click(function () {
-              chat_toggle_floating_menu();
-            });
-
-            // onClick - Show/Hide settings panel
-            $("#cb_com #setts").click(function () {
-              chat_toggle_settings_panel("com");
-            });
+        .attr("id", "cb_com")
+        .addClass("cb")
+        .html(fb_chat.tpl.fltMenu)
+        .appendTo($("body"))
+        .css('right', '20px')
+        .css('bottom', '0px')
+        .css('display', 'block')
+        .find('.cbc')
+        .css('display', 'none')
+        .parent()
+        .find('.cbt img')
+        .css('display', 'none')
+        .ready(function () {
+          // onClick - Show/Hide Floating Menu
+          $("#cb_com .tc").click(function () {
+            chat_toggle_floating_menu();
           });
+
+          // onClick - Show/Hide settings panel
+          $("#cb_com #setts").click(function () {
+            chat_toggle_settings_panel("com");
+          });
+        });
     };
 
     var setup_init_events = function () {
@@ -131,13 +131,13 @@
       }
 
       $("<div />")
-          .attr("id", "cb_" + tid)
-          .addClass("cb")
-          .html(fb_chat.tpl.chatBox)
-          .appendTo($("body"))
-          .ready(function () {
-            get_user_name(tid);
-          });
+        .attr("id", "cb_" + tid)
+        .addClass("cb")
+        .html(fb_chat.tpl.chatBox)
+        .appendTo($("body"))
+        .ready(function () {
+          get_user_name(tid);
+        });
 
       $("#cb_" + tid).css('bottom', '0px');
 

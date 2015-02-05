@@ -1,5 +1,12 @@
 <?php
+/**
+ * @file
+ * Main class of fb_chat plugin.
+ */
 
+/**
+ * Class fb_chat_main.
+ */
 class fb_chat_main {
 
   /**
@@ -73,7 +80,8 @@ class fb_chat_main {
    *  1: Chat is turned on
    */
   public function get_chat_status($uid) {
-    $count = e107::getDb()->count("fb_chat_turnedoff", "(*)", "fb_chat_turnedoff_uid = " . (int) $uid);
+    $count = e107::getDb()
+      ->count("fb_chat_turnedoff", "(*)", "fb_chat_turnedoff_uid = " . (int) $uid);
     if ($count > 0) {
       return 0;
     }

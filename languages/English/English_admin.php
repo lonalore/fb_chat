@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Definition of english strings for Admin UI.
+ */
 
 define('LANA_FB_CHAT_01', 'Settings');
 define('LANA_FB_CHAT_02', 'FB Chat on/off');

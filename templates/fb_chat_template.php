@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Templates for fb_chat plugin.
+ */
 
 $FB_CHAT_TEMPLATE['MENU_START'] = "<ul class='fbcm'>";
 $FB_CHAT_TEMPLATE['MENU_ITEM'] = "<li>{AVATAR}</li>";
