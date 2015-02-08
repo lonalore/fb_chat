@@ -16,7 +16,7 @@ define('LANA_FB_CHAT_05', 'Šíøka avataru v menu');
 define('LANA_FB_CHAT_06', 'Výška avataru v menu');
 define('LANA_FB_CHAT_07', 'Šíøka avataru na stránce');
 define('LANA_FB_CHAT_08', 'Výška avataru na stránce');
-define('LANA_FB_CHAT_09', 'Chat launch class');
+define('LANA_FB_CHAT_09', 'Chat tøída spuštìní');
 define('LANA_FB_CHAT_10', 'Chat rychlost (min)');
 define('LANA_FB_CHAT_11', 'Chat rychlost (max)');
 define('LANA_FB_CHAT_12', ' sek');
