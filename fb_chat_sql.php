@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS fb_chat (
+CREATE TABLE fb_chat (
 `fb_chat_id` int(10) NOT NULL AUTO_INCREMENT,
 `fb_chat_from` int(10) NOT NULL,
 `fb_chat_to` int(10) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS fb_chat (
 PRIMARY KEY (`fb_chat_id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS fb_chat_turnedoff (
+CREATE TABLE fb_chat_turnedoff (
 `fb_chat_turnedoff_uid` int(10) NOT NULL,
 PRIMARY KEY (`fb_chat_turnedoff_uid`)
 ) ENGINE=MyISAM;
