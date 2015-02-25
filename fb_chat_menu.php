@@ -4,64 +4,73 @@
  * Class installation to display menu block.
  */
 
-if (!defined('e107_INIT')) {
-  exit;
+if(!defined('e107_INIT'))
+{
+	exit;
 }
 
-if (!plugInstalled('fb_chat')) {
-  exit;
+if(!e107::isInstalled('fb_chat'))
+{
+	exit;
 }
 
 // Include main fb_chat class.
-require_once("classes/fb_chat_main.class.php");
+e107_require_once("classes/fb_chat_main.class.php");
 
 // [PLUGINS]/fb_chat/languages/[LANGUAGE]/[LANGUAGE]_front.php
-e107::lan('fb_chat', FALSE, TRUE);
+e107::lan('fb_chat', false, true);
+
 
 /**
  * Class fb_chat_menu.
  */
-class fb_chat_menu extends fb_chat_main {
+class fb_chat_menu extends fb_chat_main
+{
 
-  private $onlineList = array();
-  protected $plugPrefs = array();
+	private   $onlineList = array();
+	protected $plugPrefs  = array();
 
-  /**
-   * List online users after check current user permission.
-   */
-  function __construct() {
-    $this->plugPrefs = e107::getPlugConfig('fb_chat')->getPref();
+	/**
+	 * List online users after check current user permission.
+	 */
+	function __construct()
+	{
+		$this->plugPrefs = e107::getPlugConfig('fb_chat')->getPref();
 
-    if (!$this->check_permission()) {
-      return;
-    }
+		if(!$this->check_permission())
+		{
+			return;
+		}
 
-    $this->onlineList = $this->get_online_users();
-    $this->list_online_users();
-  }
+		$this->onlineList = $this->get_online_users();
+		$this->list_online_users();
+	}
 
-  /**
-   * Render output HTML.
-   */
-  function list_online_users() {
-    $template = e107::getTemplate('fb_chat');
-    $sc = e107::getScBatch('fb_chat', TRUE);
-    $tp = e107::getParser();
+	/**
+	 * Render output HTML.
+	 */
+	function list_online_users()
+	{
+		$template = e107::getTemplate('fb_chat');
+		$sc = e107::getScBatch('fb_chat', true);
+		$tp = e107::getParser();
 
-    $text = $tp->parseTemplate($template['MENU_START']);
-    foreach ($this->onlineList as $val) {
-      $sc->setVars($val);
-      $text .= $tp->parseTemplate($template['MENU_ITEM'], TRUE, $sc);
-    }
-    $text .= $tp->parseTemplate($template['MENU_END']);
+		$text = $tp->parseTemplate($template['MENU_START']);
+		foreach($this->onlineList as $val)
+		{
+			$sc->setVars($val);
+			$text .= $tp->parseTemplate($template['MENU_ITEM'], true, $sc);
+		}
+		$text .= $tp->parseTemplate($template['MENU_END']);
 
-    $text = '<div class="fbcmw">' . $text . '</div>';
+		$text = '<div class="fbcmw">' . $text . '</div>';
 
-    e107::getRender()->tablerender(LANF_FB_CHAT_01, $text);
-    unset($text);
-  }
+		e107::getRender()->tablerender(LANF_FB_CHAT_01, $text);
+		unset($text);
+	}
 
 }
+
 
 // Class installation.
 new fb_chat_menu();

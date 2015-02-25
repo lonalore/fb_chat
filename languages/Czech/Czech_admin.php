@@ -1,38 +1,38 @@
 <?php
-/*
-+ ----------------------------------------------------------------------------+
-|     e107 FB_Chat - Language File.
-|
-|     $Revision v1.0 $
-|     $Date - 3.7.2014 22:24:33 $
-|     $Author - Oxigen $
-+----------------------------------------------------------------------------+
-*/
-define('LANA_FB_CHAT_01', 'Nastavení');
+/**
+ * @file
+ * Definition of czech strings for Admin UI.
+ *
+ * @author Oxigen
+ */
+
+define('LANA_FB_CHAT_01', 'NastavenÃ­');
 define('LANA_FB_CHAT_02', 'FB Chat zap./vyp.');
 define('LANA_FB_CHAT_03', 'Vzhled');
 define('LANA_FB_CHAT_04', 'Povolit Chat pro');
-define('LANA_FB_CHAT_05', 'Šíøka avataru v menu');
-define('LANA_FB_CHAT_06', 'Výška avataru v menu');
-define('LANA_FB_CHAT_07', 'Šíøka avataru na stránce');
-define('LANA_FB_CHAT_08', 'Výška avataru na stránce');
-define('LANA_FB_CHAT_09', 'Chat tøída spuštìní');
+define('LANA_FB_CHAT_05', 'Å Ã­Ã¸ka avataru v menu');
+define('LANA_FB_CHAT_06', 'VÃ½Å¡ka avataru v menu');
+define('LANA_FB_CHAT_07', 'Å Ã­Ã¸ka avataru na strÃ¡nce');
+define('LANA_FB_CHAT_08', 'VÃ½Å¡ka avataru na strÃ¡nce');
+define('LANA_FB_CHAT_09', 'Chat tÃ¸Ã­da spuÅ¡tÃ¬nÃ­');
 define('LANA_FB_CHAT_10', 'Chat rychlost (min)');
 define('LANA_FB_CHAT_11', 'Chat rychlost (max)');
 define('LANA_FB_CHAT_12', ' sek');
 define('LANA_FB_CHAT_13', 'Chat titulek okna');
-define('LANA_FB_CHAT_14', 'Uživatelské jméno');
-define('LANA_FB_CHAT_15', 'Zobrazit jméno nebo uživatelské jméno');
-define('LANA_FB_CHAT_16', 'Výchozí avatar');
+define('LANA_FB_CHAT_14', 'UÅ¾ivatelskÃ© jmÃ©no');
+define('LANA_FB_CHAT_15', 'Zobrazit jmÃ©no nebo uÅ¾ivatelskÃ© jmÃ©no');
+define('LANA_FB_CHAT_16', 'VÃ½chozÃ­ avatar');
 define('LANA_FB_CHAT_17', 'Titulek okna jako odkaz');
-define('LANA_FB_CHAT_18', 'Smajlíci');
-define('LANA_FB_CHAT_19', 'Základní nastavení');
+define('LANA_FB_CHAT_18', 'SmajlÃ­ci');
+define('LANA_FB_CHAT_19', 'ZÃ¡kladnÃ­ nastavenÃ­');
 define('LANA_FB_CHAT_20', 'Chat avatar');
 define('LANA_FB_CHAT_21', 'Vzhled');
-define('LANA_FB_CHAT_22', 'Styl zobrazení datumu');
-define('LANA_FB_CHAT_23', 'Vytváøet klikací odkazy');
-define('LANA_FB_CHAT_24', 'Vytvoøit pøipojitelná Audio/Video HTML');
-define('LANA_FB_CHAT_25', 'Plovoucí on-line seznam');
+define('LANA_FB_CHAT_22', 'Styl zobrazenÃ­ datumu');
+define('LANA_FB_CHAT_23', 'VytvÃ¡Ã¸et klikacÃ­ odkazy');
+define('LANA_FB_CHAT_24', 'VytvoÃ¸it pÃ¸ipojitelnÃ¡ Audio/Video HTML');
+define('LANA_FB_CHAT_25', 'PlovoucÃ­ on-line seznam');
 define('LANA_FB_CHAT_26', 'Chat rychlost (menu)');
-
-?>
+define("LANA_FB_CHAT_27", "Short date format");
+define("LANA_FB_CHAT_28", "Long date format");
+define("LANA_FB_CHAT_29", "Forum date format");
+define("LANA_FB_CHAT_30", "Relative date format");
