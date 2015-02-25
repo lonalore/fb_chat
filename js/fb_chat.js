@@ -602,7 +602,7 @@
 
                 $(cbta).val('');
                 $(cbta).focus();
-                $(cbta).css('height', '20px');
+                $(cbta).css('height', '24px');
 
                 fb_chat.conf.heartbeat = fb_chat.conf.heartbeatMin;
                 fb_chat.conf.heartbeatCount = 1;
