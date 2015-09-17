@@ -1,13 +1,10 @@
 <?php
-/*
-+ ----------------------------------------------------------------------------+
-|     e107 FB_Chat - Language File.
-|
-|     $Revision v1.0 $
-|     $Date - 3.7.2014 22:24:33 $
-|     $Author - Oxigen $
-+----------------------------------------------------------------------------+
-*/
+/**
+ * @file
+ * Definition of english strings for area Frontend.
+ *
+ * @author Oxigen
+ */
 define('LANF_FB_CHAT_01', 'Chat s uživateli');
 define('LANF_FB_CHAT_02', 'Seznam uživatelù...');
 define('LANF_FB_CHAT_03', 'Poslední zpráva:');
