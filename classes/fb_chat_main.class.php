@@ -248,7 +248,7 @@ class fb_chat_main
 		$urls = $this->get_urls_from_string($text);
 		if(isset($urls[0]) && !empty($urls[0]))
 		{
-			require_once("autoembed/AutoEmbed.class.php");
+			e107_include(e_PLUGIN . "fb_chat/classes/autoembed/AutoEmbed.class.php");
 
 			$aeObj = new AutoEmbed;
 			$embedCode = "";
@@ -335,7 +335,10 @@ class fb_chat_main
 		return $text;
 	}
 
-
+	/**
+	 * Converts a PHP variable into its JavaScript equivalent.
+	 * We use HTML-safe strings, with several characters escaped.
+	 */
 	function fb_chat_json_encode($var)
 	{
 		// The PHP version cannot change within a request.
@@ -355,6 +358,9 @@ class fb_chat_main
 		return $this->fb_chat_json_encode_helper($var);
 	}
 
+	/**
+	 * Encodes a PHP variable to HTML-safe JSON for PHP versions below 5.3.0.
+	 */
 	function fb_chat_json_encode_helper($var)
 	{
 		switch(gettype($var))
