@@ -167,7 +167,11 @@ class fb_chat extends fb_chat_main
 
 			$_SESSION['chatHistory'][$fid] .= '{ "s": "0", "f": { "id": "' . $fid . '", "name": "' . $fnm . '" }, "m": "' . $msg . '" },';
 
-			unset($_SESSION['tsChatBoxes'][$fid]);
+			if(isset($_SESSION['tsChatBoxes'][$fid]))
+			{
+				unset($_SESSION['tsChatBoxes'][$fid]);
+			}
+
 			$_SESSION['openChatBoxes'][$fid] = $snt;
 		}
 
@@ -201,8 +205,12 @@ class fb_chat extends fb_chat_main
 			}
 		}
 
-		e107::getDb()
-			->update("fb_chat", "fb_chat_rcd = 1 WHERE fb_chat_to = " . USERID . " AND fb_chat_rcd = 0 ");
+		$update = array(
+			'fb_chat_rcd' => 1,
+			'WHERE'       => 'fb_chat_to = ' . USERID . ' AND fb_chat_rcd = 0',
+		);
+
+		e107::getDb()->update("fb_chat", $update);
 
 		if(!empty($items))
 		{
