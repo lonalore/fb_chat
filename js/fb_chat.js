@@ -31,7 +31,7 @@
 
 		var init = function ()
 		{
-			fb_chat.tpl = new Object();
+			fb_chat.tpl = {};
 
 			// Merge options
 			fb_chat.conf = $.extend({}, defaults, options);
@@ -39,10 +39,10 @@
 			fb_chat.conf.heartbeat = fb_chat.conf.heartbeatMin;
 			fb_chat.conf.heartbeatCount = 0;
 
-			fb_chat.conf.chatBoxes = new Array();
-			fb_chat.conf.chatboxFocus = new Array();
-			fb_chat.conf.newMessages = new Array();
-			fb_chat.conf.newMessagesWin = new Array();
+			fb_chat.conf.chatBoxes = [];
+			fb_chat.conf.chatboxFocus = [];
+			fb_chat.conf.newMessages = [];
+			fb_chat.conf.newMessagesWin = [];
 
 			fb_chat.conf.windowFocus = true;
 			fb_chat.conf.originalTitle = document.title;
@@ -138,11 +138,14 @@
 
 		var chat_create_chatbox = function (tid, minimizeChatBox)
 		{
-			if($("#cb_" + tid).length > 0)
+			var $cbTid = $("#cb_" + tid);
+			var $cbTidCbta = $("#cb_" + tid + " .cbta");
+
+			if($cbTid.length > 0)
 			{
-				if($("#cb_" + tid).css('display') == 'none')
+				if($cbTid.css('display') == 'none')
 				{
-					$("#cb_" + tid).css('display', 'block');
+					$cbTid.css('display', 'block');
 					chat_restructure_boxes();
 				}
 				$("#cb_" + tid + " .cbta").focus();
@@ -159,7 +162,7 @@
 					get_user_name(tid);
 				});
 
-			$("#cb_" + tid).css('bottom', '0px');
+			$cbTid.css('bottom', '0px');
 
 			chatBoxeslength = 0;
 			for(x in fb_chat.conf.chatBoxes)
@@ -180,7 +183,7 @@
 				{
 					width = 20;
 				}
-				$("#cb_" + tid).css('right', width + 'px');
+				$cbTid.css('right', width + 'px');
 			}
 			else
 			{
@@ -189,14 +192,14 @@
 				{
 					width += 200 + 7;
 				}
-				$("#cb_" + tid).css('right', width + 'px');
+				$cbTid.css('right', width + 'px');
 			}
 
 			fb_chat.conf.chatBoxes.push(tid);
 
 			if(minimizeChatBox == 1)
 			{
-				minimizedChatBoxes = new Array();
+				minimizedChatBoxes = [];
 				if(cookie('cb_minimized'))
 				{
 					minimizedChatBoxes = cookie('cb_minimized').split(/\|/);
@@ -221,7 +224,7 @@
 
 			fb_chat.conf.chatboxFocus[tid] = false;
 
-			$("#cb_" + tid + " .cbta").blur(function ()
+			$cbTidCbta.blur(function ()
 			{
 				fb_chat.conf.chatboxFocus[tid] = false;
 				$("#cb_" + tid + " .cbta").removeClass('cbtasel');
@@ -234,7 +237,7 @@
 			});
 
 			// onClick - Focus input textarea
-			$("#cb_" + tid).click(function ()
+			$cbTid.click(function ()
 			{
 				if($('#cb_' + tid + ' .cbc').css('display') != "none")
 				{
@@ -255,7 +258,7 @@
 			});
 
 			// onKeydown - Check Enter keydowns
-			$("#cb_" + tid + " .cbta").keydown(function (event)
+			$cbTidCbta.keydown(function (event)
 			{
 				check_input_key(event, this, tid);
 				if(event.keyCode == 13 && event.shiftKey == 0)
@@ -269,12 +272,14 @@
 			//chat_toggle_settings_panel(tid);
 			//});
 
-			$("#cb_" + tid).show();
+			$cbTid.show();
 		};
 
 		var chat_toggle_settings_panel = function (tid)
 		{
-			if($("#cb_" + tid + " .settscnt").css('display') == "none")
+			var $settscnt = $("#cb_" + tid + " .settscnt");
+
+			if($settscnt.css('display') == "none")
 			{
 				// Floating menu settings...
 				if(tid == "com")
@@ -311,33 +316,38 @@
 					});
 				}
 
-				$("#cb_" + tid + " .settscnt").css('display', 'block');
+				$settscnt.css('display', 'block');
 			}
 			else
 			{
-				$("#cb_" + tid + " .settscnt").css('display', 'none');
+				$settscnt.css('display', 'none');
 			}
 		};
 
 		var chat_toggle_floating_menu = function ()
 		{
-			if($('#cb_com .cbc').css('display') == 'none')
+			var $cbc = $('#cb_com .cbc');
+			var $cbtImg = $('#cb_com .cbt img');
+
+			if($cbc.css('display') == 'none')
 			{
-				$('#cb_com .cbc').css('display', 'block');
-				$('#cb_com .cbt img').css('display', 'block');
+				$cbc.css('display', 'block');
+				$cbtImg.css('display', 'block');
 			}
 			else
 			{
-				$('#cb_com .cbc').css('display', 'none');
-				$('#cb_com .cbt img').css('display', 'none');
+				$cbc.css('display', 'none');
+				$cbtImg.css('display', 'none');
 			}
 		};
 
 		var chat_toggle_chatbox = function (tid)
 		{
-			if($('#cb_' + tid + ' .cbc').css('display') == "none")
+			var $cbc = $('#cb_' + tid + ' .cbc');
+
+			if($cbc.css('display') == "none")
 			{
-				var minimizedChatBoxes = new Array();
+				var minimizedChatBoxes = [];
 				if(cookie('cb_minimized'))
 				{
 					minimizedChatBoxes = cookie('cb_minimized').split(/\|/);
@@ -356,11 +366,11 @@
 				cookie('cb_minimized', newCookie);
 
 				$('#cb_' + tid + ' img#setts').css('display', 'block');
-				$('#cb_' + tid + ' .cbc').css('display', 'block');
+				$cbc.css('display', 'block');
 				$('#cb_' + tid + ' .cbi').css('display', 'block');
 
-				scHeight = $("#cb_" + tid + " .cbc")[0].scrollHeight;
-				$("#cb_" + tid + " .cbc").scrollTop(scHeight);
+				scHeight = $cbc[0].scrollHeight;
+				$cbc.scrollTop(scHeight);
 			}
 			else
 			{
@@ -373,7 +383,7 @@
 				cookie('cb_minimized', newCookie);
 
 				$('#cb_' + tid + ' img#setts').css('display', 'none');
-				$('#cb_' + tid + ' .cbc').css('display', 'none');
+				$cbc.css('display', 'none');
 				$('#cb_' + tid + ' .cbi').css('display', 'none');
 			}
 		};
@@ -676,9 +686,10 @@
 
 					for(i = 0; i < fb_chat.conf.chatBoxes.length; i++)
 					{
-						tid = fb_chat.conf.chatBoxes[i];
-						scHeight = $("#cb_" + tid + " .cbc")[0].scrollHeight;
-						$("#cb_" + tid + " .cbc").scrollTop(scHeight);
+						var tid = fb_chat.conf.chatBoxes[i];
+						var $cbc = $("#cb_" + tid + " .cbc");
+						scHeight = $cbc[0].scrollHeight;
+						$cbc.scrollTop(scHeight);
 					}
 
 					setTimeout(function ()
@@ -739,11 +750,12 @@
 						dataType: "json",
 						success: function (data)
 						{
-							$("#cb_" + tid + " .cbc").append(fb_chat.tpl.msgNrm);
+							var $cbc = $("#cb_" + tid + " .cbc");
+							$cbc.append(fb_chat.tpl.msgNrm);
 							$("#cb_" + tid + " .cbmsgfrm").last().html(data.f).text();
 							$("#cb_" + tid + " .cbmsgcnt").last().html(data.m);
-							scHeight = $("#cb_" + tid + " .cbc")[0].scrollHeight;
-							$("#cb_" + tid + " .cbc").scrollTop(scHeight);
+							scHeight = $cbc[0].scrollHeight;
+							$cbc.scrollTop(scHeight);
 						}
 					});
 				}
