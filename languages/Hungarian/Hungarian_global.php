@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Definition of english strings for common usage.
+ * Definition of hungarian strings for common usage.
  */
 
 define("LAN_PLUGIN__FB_CHAT_NAME", "FB Chat");

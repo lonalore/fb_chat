@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Definition of english strings for area Frontend.
+ * Definition of hungarian strings for area Frontend.
  */
 
 define('LANF_FB_CHAT_01', 'Chat-elj');

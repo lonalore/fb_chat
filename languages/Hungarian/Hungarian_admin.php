@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Definition of english strings for Admin UI.
+ * Definition of hungarian strings for Admin UI.
  */
 
 define('LANA_FB_CHAT_01', 'Beállítások');
