@@ -1,8 +1,6 @@
 FB Chat (e107 plugin)
 =====================
 
-[![Github Releases](https://img.shields.io/github/downloads/lonalore/google_analytics/total.svg)]()
-
 Requirements:
 - e107 CMS v2.x (with jQuery Framework)
 
