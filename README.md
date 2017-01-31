@@ -34,3 +34,8 @@ Screenshots
 
 ### Admin Area - Appearance (tab)
 ![Screenshot 6](http://demo.lonalore.hu/screenshots/fb_chat/06.png?v=4)
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/lonalore/fb_chat/badge.svg?style=beer-square)](https://beerpay.io/lonalore/fb_chat)  [![Beerpay](https://beerpay.io/lonalore/fb_chat/make-wish.svg?style=flat-square)](https://beerpay.io/lonalore/fb_chat?focus=wish)
